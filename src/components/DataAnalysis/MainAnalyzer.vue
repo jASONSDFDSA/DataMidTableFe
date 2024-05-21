@@ -2,10 +2,10 @@
     <div>
         <el-container class="container">    
             <el-header class="header">
-                <title>Analizer</title>
-                <div class="header-name"><h1>数据分析</h1></div>
+                <title>Analyzer</title>
+                <div class="header-name"><h1><el-icon><DataAnalysis /></el-icon>&nbsp;数据分析</h1></div>
                 <div class="header-button">
-                    <el-button type="danger">退出登录</el-button>
+                    <el-button type="danger" @click="logout()">退出登录</el-button>
                     <el-button>修改密码</el-button>
                 </div>
             </el-header>
@@ -21,8 +21,8 @@
                         @open="handleOpen"
                         @close="handleClose"
                     >
-                        <el-menu-item index="1">数据分析</el-menu-item>
-                        <el-menu-item index="2">数据可视化</el-menu-item>
+                        <el-menu-item index="1" class="menu-item"><el-icon><Notification /></el-icon>通知</el-menu-item>
+                        <el-menu-item index="2" class="menu-item"><el-icon><DataBoard /></el-icon>数据分析</el-menu-item>
                     </el-menu>
                 </el-aside>
 
@@ -38,6 +38,10 @@
 </template>
 
 <script>
+import { logout } from '@/api/user'
+import { ElMessage } from 'element-plus'
+import storage from '@/store/storage'
+
 export default {
     data() {
         return {
@@ -50,6 +54,14 @@ export default {
         },
         handleClose(key, keyPath) {
             console.log(key, keyPath)
+        },
+        logout() {
+            this.$router.push('/login')
+            logout().then(() => {
+                ElMessage.success('退出成功')
+                storage.clear()
+                this.$router.push('/')
+            })
         }
     }
 }
@@ -75,6 +87,7 @@ export default {
         color: white;
         height: 100%;
         margin-left: 30px;
+        font-size: 26px;
     }
     .header-button {
         display: flex;
@@ -88,5 +101,8 @@ export default {
     }
     .aside-menu {
         width: 100%;
+    }
+    .menu-item {
+        font-size: 18px;
     }
 </style>
