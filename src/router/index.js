@@ -6,8 +6,16 @@ const routes = [
         component: () => import("../components/Login/MainLogin.vue")
     },
     {
-        path: "/register",
-        component: () => import("../components/Login/MainRegister.vue")
+        path: "/analizer",
+        component: () => import("../components/DataAnalysis/MainAnalizer.vue")
+    },
+    {
+        path: "/admin",
+        component: () => import("../components/Admin/MainAdmin.vue")
+    },
+    {
+        path: "/developer",
+        component: () => import("../components/ProjectDev/MainProjectDev.vue")
     }
 ]
 

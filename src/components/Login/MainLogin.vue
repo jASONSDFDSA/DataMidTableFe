@@ -1,7 +1,7 @@
 <template>
     <body>
         <div class="form-box">
-            <el-tabs class="tabs-title" v-if="isLogin||isRegister" v-model="activeName" @tab-click="handleClick">
+            <el-tabs class="tabs-title" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="登录" name="first"><h1 class="login-title">登录</h1></el-tab-pane>
                 <el-tab-pane label="注册" name="second"><h1 class="login-title">注册</h1></el-tab-pane>
             </el-tabs>
@@ -15,9 +15,9 @@
                     </el-form-item>
                     <div class="center"> <!-- 选择身份 -->
                         <el-radio-group v-model="loginform.identity">
-                            <el-radio value="Analizer">数据分析</el-radio>
-                            <el-radio value="Admin">管理员</el-radio>
-                            <el-radio value="Developer">项目开发</el-radio>
+                            <el-radio value="Analizer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
+                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>管理员</el-radio>
+                            <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
                     <div class="center">
@@ -42,9 +42,9 @@
                     </el-form-item>
                     <div class="center">
                         <el-radio-group v-model="registerform.identity">
-                            <el-radio value="Analizer">数据分析</el-radio>
-                            <el-radio value="Admin">管理员</el-radio>
-                            <el-radio value="Developer">项目开发</el-radio>
+                            <el-radio value="Analizer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
+                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>管理员</el-radio>
+                            <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
                         <div class="center">
@@ -60,13 +60,13 @@
                         <el-input v-model="applyform.email" placeholder="请输入学校邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="申请理由" prop="reasons">
-                        <el-input type="textarea" style="height:200px" show-word-limit="true" v-model="applyform.reasons" placeholder="请输入申请理由。务必具体详细，否则可能被拒绝！"></el-input>
+                        <el-input type="textarea" style="height:200px" :show-word-limit="showLimit" v-model="applyform.reasons" placeholder="请输入申请理由。务必具体详细，否则可能被拒绝！"></el-input>
                     </el-form-item>
                     <div class="center">
                         <el-radio-group v-model="applyform.identity">
-                            <el-radio value="Analizer">数据分析</el-radio>
-                            <el-radio value="Admin">管理员</el-radio>
-                            <el-radio value="Developer">项目开发</el-radio>
+                            <el-radio value="Analizer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
+                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>管理员</el-radio>
+                            <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
                     <div class="center">
@@ -150,7 +150,8 @@ export default {
             activeName: 'first',
             isLogin: true,
             isRegister: false,
-            isApply: false
+            isApply: false,
+            showLimit: true
         };
     },
     methods: {
@@ -159,6 +160,27 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     alert('submit!');
+
+                    // To DO: Send the login request to the server
+                    // axios.post('http://localhost:8080/login', {
+                    //     username: this.loginform.username,
+                    //     password: this.loginform.password,
+                    //     identity: this.loginform.identity
+                    // }).then(function (response) {
+                    //     console.log(response);
+                    // }).catch(function (error) {
+                    //     console.log(error);
+                    // });
+                    
+                    console.log(this.loginform.identity);
+                    if (this.loginform.identity === 'Analizer') {
+                        this.$router.push('/analizer');
+                    } else if (this.loginform.identity === 'Admin') {
+                        this.$router.push('/admin');
+                    } else {
+                        this.$router.push('/developer');
+                    }
+
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -175,25 +197,39 @@ export default {
                 }
             });
         },
+        apply(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
         getInviteCode() {
-            alert('获取邀请码');
             this.isLogin = false;
             this.isRegister = false;
             this.isApply = true;
+            this.activeName = '';
         },
         reset(formName) {
-            this.$refs[formName].resetFields();
+            if(this.$refs[formName] !== undefined && this.$refs[formName] !== null)
+                this.$refs[formName].resetFields();
         },
         handleClick(tab, event) {
-            // console.log(tab.props.name);
             if (tab.props.name === 'first') {
                 this.isLogin = true;
                 this.isRegister = false;
+                this.isApply = false;
                 this.reset('registerform');
+                this.reset('applyform');
             } else {
                 this.isLogin = false;
                 this.isRegister = true;
+                this.isApply = false;
                 this.reset('loginform');
+                this.reset('applyform');
             }
         },
     }
