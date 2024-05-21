@@ -21,8 +21,9 @@
                         @open="handleOpen"
                         @close="handleClose"
                     >
-                        <el-menu-item index="1" class="menu-item"><el-icon><Notification /></el-icon>通知</el-menu-item>
-                        <el-menu-item index="2" class="menu-item"><el-icon><DataBoard /></el-icon>数据分析</el-menu-item>
+                        <el-menu-item index="1" class="menu-item"><el-icon><Message /></el-icon>通知</el-menu-item>   
+                        <el-menu-item index="2" class="menu-item"><el-icon><DataBoard /></el-icon>浏览项目</el-menu-item>
+                        <el-menu-item index="3" class="menu-item"><el-icon><Histogram /></el-icon>数据分析</el-menu-item>
                     </el-menu>
                 </el-aside>
 

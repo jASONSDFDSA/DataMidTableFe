@@ -16,7 +16,7 @@
                     <div class="center"> <!-- 选择身份 -->
                         <el-radio-group v-model="loginform.identity">
                             <el-radio value="Analyzer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
-                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>管理员</el-radio>
+                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
                             <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
@@ -82,7 +82,7 @@
                     <div class="center">
                         <el-radio-group v-model="registerform.identity">
                             <el-radio value="Analyzer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
-                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>管理员</el-radio>
+                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
                             <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
