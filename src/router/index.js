@@ -5,6 +5,7 @@ const routes = [
     {
         name: "Login",
         path: "/",
+        alias: "/login",
         component: () => import("../components/Login/MainLogin.vue")
     },
     {
