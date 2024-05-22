@@ -115,7 +115,7 @@
 
 import { login, signup, apply } from '@/api/user';
 import storage from '@/store/storage';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 export default {
     data() {
@@ -306,6 +306,7 @@ export default {
             if(this.$refs[formName] !== undefined && this.$refs[formName] !== null)
                 this.$refs[formName].resetFields();
         },
+        // eslint-disable-next-line no-unused-vars
         handleClick(tab, event) {
             if (tab.props.name === 'first') {
                 this.isLogin = true;

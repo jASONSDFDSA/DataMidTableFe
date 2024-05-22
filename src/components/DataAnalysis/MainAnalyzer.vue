@@ -9,23 +9,6 @@
                     <el-button @click="showChangePwd()">修改密码</el-button>
                 </div>
             </el-header>
-            <div v-if="showPwdBox" class="pwdBox">
-                <el-form :model="changePwdForm" :rules="changePwdRules" ref="changePwdForm" label-width="80px">
-                    <el-form-item label="原密码" prop="oldPwd">
-                        <el-input v-model="changePwdForm.oldPwd" type="password"></el-input>
-                    </el-form-item>
-                    <el-form-item label="新密码" prop="newPwd">
-                        <el-input v-model="changePwdForm.newPwd" type="password"></el-input>
-                    </el-form-item>
-                    <el-form-item label="确认密码" prop="confirmPwd">
-                        <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
-                    </el-form-item>
-                    <div class="center">
-                        <el-button type="primary" @click="changePassword()">修改密码</el-button>
-                        <el-button type="danger" @click="clearPwdBox()">取消</el-button>
-                    </div>
-                </el-form>
-            </div>
             <el-container>
                 <el-aside width="200px" class="aside">
                     <el-menu
@@ -34,8 +17,7 @@
                         class="aside-menu"
                         default-active="1"
                         text-color="#fff"
-                        @open="handleOpen"
-                        @close="handleClose"
+                        @select="handleSelect"
                     >
                         <el-menu-item index="1" class="menu-item"><el-icon><Message /></el-icon>通知</el-menu-item>   
                         <el-menu-item index="2" class="menu-item"><el-icon><DataBoard /></el-icon>浏览项目</el-menu-item>
@@ -45,6 +27,23 @@
 
                 <el-main>
                     <router-view></router-view>
+                    <div v-if="showPwdBox" class="pwdBox">
+                        <el-form :model="changePwdForm" :rules="changePwdRules" ref="changePwdForm" label-width="80px">
+                            <el-form-item label="原密码" prop="oldPwd">
+                                <el-input v-model="changePwdForm.oldPwd" type="password"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码" prop="newPwd">
+                                <el-input v-model="changePwdForm.newPwd" type="password"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认密码" prop="confirmPwd">
+                                <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
+                            </el-form-item>
+                            <div class="center">
+                                <el-button type="primary" @click="changePassword()">修改密码</el-button>
+                                <el-button type="danger" @click="clearPwdBox()">取消</el-button>
+                            </div>
+                        </el-form>
+                    </div>
                 </el-main>
             </el-container>
             
@@ -91,11 +90,17 @@ export default {
         }
     },
     methods: {
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath)
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath)
+        // eslint-disable-next-line no-unused-vars
+        handleSelect(key, keyPath) {
+            // console.log(key, keyPath)
+            // console.log('handleselect')
+            if (key === '1') {
+                this.$router.push({name: 'Message'});
+            } else if (key === '2') {
+                this.$router.push({name: 'ProjectView'});
+            } else if (key === '3') {
+                this.$router.push({name: 'DataAnalysis'});
+            }
         },
         logout() {
             logout().then(() => {

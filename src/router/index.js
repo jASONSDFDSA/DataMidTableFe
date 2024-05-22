@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {storage} from '../store/storage'
 
 const routes = [
     {
@@ -11,7 +10,24 @@ const routes = [
     {
         name: "Analyzer",
         path: "/analyzer/:username",
-        component: () => import("../components/DataAnalysis/MainAnalyzer.vue")
+        component: () => import("../components/DataAnalysis/MainAnalyzer.vue"),
+        children: [
+            {
+                name: "Message",
+                path: "message",
+                component: () => import("../components/DataAnalysis/SubPages/Message.vue")
+            },
+            {
+                name: "ProjectView",
+                path: "projectview",
+                component: () => import("../components/DataAnalysis/SubPages/ProjectView.vue")
+            },
+            {
+                name: "DataAnalysis",
+                path: "dataanalysis",
+                component: () => import("../components/DataAnalysis/SubPages/DataAnalysis.vue")
+            }
+        ]
     },
     {
         name: "Admin",
