@@ -1,15 +1,18 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div style="height:85vh">
+    <div class="body">
         <div class="search">
-            <el-icon><Search /></el-icon>&nbsp;
-            <el-input v-model="search" placeholder="请输入消息标题" @input="searchMessage" clearable></el-input>
+            <el-input v-model="search" placeholder="请输入消息标题">
+                <template #prefix>
+                    <el-icon><Search /></el-icon>
+                </template>
+            </el-input>
             <div class="search-button">
-                <el-button type="primary" @click="search()">搜索</el-button>
-                <el-button @click="addNewMessage()">刷新</el-button>
+                <el-button type="primary" @click="searchMessages()" round>搜索</el-button>
+                <el-button @click="getNewMessages()" round>刷新</el-button>
             </div>
         </div>
-        <el-scrollbar height="84vh">
+        <el-scrollbar height="73vh">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -30,75 +33,56 @@
 
 <script>
 
-import { getMessages, deleteMessage } from '@/api/DataAnalysis/message'
+import { getMessages, deleteMessage } from '@/api/message'
 import { ElMessage } from 'element-plus'
 
 export default {
     data() {
         return {
-            messages: [
-                {
-                    id: 1,
-                    title: '消息标题1',
-                    content: '消息内容1',
-                    author: 'admin'
-                },
-                {
-                    id: 2,
-                    title: '消息标题2',
-                    content: '消息内容2',
-                    author: 'admin'
-                },
-                {
-                    id: 3,
-                    title: '消息标题3',
-                    content: '消息内容3',
-                    author: 'admin'
-                }
-            ],
+            messages: [],
             search: '',
         }
     },
     methods: {
         deleteMessage(id) {
-            this.messages = this.messages.filter(message => message.id !== id)
             deleteMessage(id).then(() => {
                 ElMessage.success('删除成功')
+                this.messages = this.messages.filter(message => message.id !== id)
             }).catch(() => {
                 ElMessage.error('删除失败')
             })
         },
-        addNewMessage() {
-            this.messages.push({
-                id: this.messages.length + 1,
-                title: '消息标题',
-                content: '消息内容',
-                author: 'admin'
-            })
-        },
         getNewMessages() {
             getMessages().then(res => {
-                this.messages = res.data
+                this.messages = res.data.messages
             }).catch(() => {
                 ElMessage.error('获取消息失败')
             })
         },
+        searchMessages() {
+            this.messages = this.messages.filter(message => message.title.includes(this.search))
+        }
     },
     beforeMount() {
-        getMessages().then(res => {
-            this.messages = res.data
-        })
+        this.getNewMessages()
     }
 }
 
 </script>
 
 <style scoped>
+.body {
+    height:auto;
+    background-color: grey;
+    border-radius: 15px;
+    padding: auto;
+}
 .search {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 10px;
+    width: 80%;
+    margin: auto;
 }
 .search-button {
     margin: 10px;
@@ -108,8 +92,8 @@ export default {
 .message {
     margin: 10px;
     padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: white;
+    border-radius: 15px;
 }
 .message-header {
     font-size: 22px;
