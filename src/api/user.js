@@ -41,3 +41,12 @@ export function apply(data) {
         data
     })
 }
+
+// Change password
+export function changePassword(data) {
+    return request({
+        url: '/api/user/password',
+        method: 'put',
+        data
+    })
+}

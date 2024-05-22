@@ -6,10 +6,26 @@
                 <div class="header-name"><h1><el-icon><ArrowLeft /><ArrowRight /></el-icon>&nbsp;项目开发</h1></div>
                 <div class="header-button">
                     <el-button type="danger" @click="logout()">退出登录</el-button>
-                    <el-button>修改密码</el-button>
+                    <el-button @click="showChangePwd()">修改密码</el-button>
                 </div>
             </el-header>
-        
+            <div v-if="showPwdBox" class="pwdBox">
+                <el-form :model="changePwdForm" :rules="changePwdRules" ref="changePwdForm" label-width="80px">
+                    <el-form-item label="原密码" prop="oldPwd">
+                        <el-input v-model="changePwdForm.oldPwd" type="password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="newPwd">
+                        <el-input v-model="changePwdForm.newPwd" type="password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="confirmPwd">
+                        <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
+                    </el-form-item>
+                    <div class="center">
+                        <el-button type="primary" @click="changePassword()">修改密码</el-button>
+                        <el-button type="danger" @click="clearPwdBox()">取消</el-button>
+                    </div>
+                </el-form>
+            </div>
             <el-container>
                 <el-aside width="200px" class="aside">
                     <el-menu
@@ -38,14 +54,39 @@
 </template>
 
 <script>
-import { logout } from '@/api/user'
-import { ElMessage } from 'element-plus'
+import { logout, changePassword } from '@/api/user'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import storage from '@/store/storage'
 
 export default {
     data() {
         return {
-            activeIndex: '1'
+            activeIndex: '1',
+            showPwdBox: false,
+            changePwdForm: {
+                oldPwd: '',
+                newPwd: '',
+                confirmPwd: ''
+            },
+            changePwdRules: {
+                oldPwd: [
+                    { required: true, message: '请输入原密码', trigger: 'blur' }
+                ],
+                newPwd: [
+                    { required: true, message: '请输入新密码', trigger: 'blur' },
+                    { pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/, message: '需数字、小写字母和大写字母各一个，长度8-16个字符', trigger: 'blur' }
+                ],
+                confirmPwd: [
+                    { required: true, message: '请再次输入新密码', trigger: 'blur' },
+                    { validator: (rule, value, callback) => {
+                        if (value !== this.changePwdForm.newPwd) {
+                            callback(new Error('两次密码不一致'))
+                        } else {
+                            callback()
+                        }
+                    }, trigger: 'blur' }
+                ]
+            }
         }
     },
     methods: {
@@ -56,11 +97,51 @@ export default {
             console.log(key, keyPath)
         },
         logout() {
-            this.$router.push('/login')
             logout().then(() => {
                 ElMessage.success('退出成功')
                 storage.clear()
                 this.$router.push('/')
+            })
+        },
+        showChangePwd() {
+            this.showPwdBox = true
+        },
+        clearPwdBox() {
+            this.$refs.changePwdForm.resetFields()
+            this.showPwdBox = false
+        },
+        changePassword() {
+            this.$refs.changePwdForm.validate((valid) => {
+                if (storage.get('user').password !== this.changePwdForm.oldPwd) {
+                    ElMessage.error('原密码错误')
+                    console.log(storage.get('user').password, this.changePwdForm.oldPwd)
+                    return false
+                }
+                if (this.changePwdForm.oldPwd === this.changePwdForm.newPwd) {
+                    ElMessage.error('新密码不能与原密码相同')
+                    return false
+                }
+                if (valid) {
+                    ElMessageBox.confirm('确认修改密码?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        changePassword(this.changePwdForm.newPwd).then(() => {
+                            const user = storage.get('user')
+                            user.password = this.changePwdForm.newPwd
+                            storage.set('user', user)
+                            // console.log(storage.get('user'))
+                            this.clearPwdBox()
+                            ElMessage.success('修改成功')
+                        })
+                    }).catch(() => {
+                        this.clearPwdBox()
+                        ElMessage.info('已取消')
+                    })
+                } else {
+                    return false
+                }
             })
         }
     }
@@ -104,5 +185,21 @@ export default {
     }
     .menu-item {
         font-size: 18px;
+    }
+    .pwdBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: fit-content;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    .center {
+        display: flex;
+        justify-content: center;
     }
 </style>

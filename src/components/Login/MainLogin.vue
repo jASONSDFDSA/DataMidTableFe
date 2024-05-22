@@ -47,7 +47,7 @@
                         <el-form-item label="密码" prop="password1">
                             <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
                         </el-form-item>
-                        <el-form-item label="二次验证" prop="password2">
+                        <el-form-item label="确认密码" prop="password2">
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
                     </div>
@@ -58,7 +58,7 @@
                         <el-form-item label="密码" prop="password1">
                             <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
                         </el-form-item>
-                        <el-form-item label="二次验证" prop="password2">
+                        <el-form-item label="确认密码" prop="password2">
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
                         <el-form-item label="邀请码" prop="invitecode">
@@ -75,7 +75,7 @@
                         <el-form-item label="密码" prop="password1">
                             <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
                         </el-form-item>
-                        <el-form-item label="二次验证" prop="password2">
+                        <el-form-item label="确认密码" prop="password2">
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
                     </div>
@@ -229,11 +229,11 @@ export default {
                         // Navigate to the corresponding page according to the identity
                         console.log(this.loginform.identity);
                         if (this.loginform.identity === 'Analyzer') {
-                            this.$router.push('/analyzer');
+                            this.$router.push('/analyzer/'+this.loginform.username);
                         } else if (this.loginform.identity === 'Admin') {
-                            this.$router.push('/admin');
+                            this.$router.push('/admin/'+this.loginform.username);
                         } else {
-                            this.$router.push('/developer');
+                            this.$router.push('/developer/'+this.loginform.username);
                         }
 
                     }).catch(error => {

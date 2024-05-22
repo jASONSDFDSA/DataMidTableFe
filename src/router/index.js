@@ -10,17 +10,17 @@ const routes = [
     },
     {
         name: "Analyzer",
-        path: "/analyzer",
+        path: "/analyzer/:username",
         component: () => import("../components/DataAnalysis/MainAnalyzer.vue")
     },
     {
         name: "Admin",
-        path: "/admin",
+        path: "/admin/:username",
         component: () => import("../components/Admin/MainAdmin.vue")
     },
     {
         name: "Developer",
-        path: "/developer",
+        path: "/developer/:projectname",
         component: () => import("../components/ProjectDev/MainProjectDev.vue")
     }
 ]
