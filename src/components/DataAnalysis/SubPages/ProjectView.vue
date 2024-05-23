@@ -60,7 +60,7 @@ export default {
             this.projects = this.projects.filter(project => project.title.includes(this.search))
         },
         watchDetails(title) {
-            this.$router.push({ path: '/projectDetails', query: { title } })
+            this.$router.push({ name:'ProjectDetails', params: { projectname: title } })
         }
     },
     beforeMount() {

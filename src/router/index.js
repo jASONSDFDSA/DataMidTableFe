@@ -15,12 +15,18 @@ const routes = [
             {
                 name: "Message",
                 path: "message",
+                alias: "",
                 component: () => import("../components/DataAnalysis/SubPages/Message.vue")
             },
             {
                 name: "ProjectView",
                 path: "projectview",
                 component: () => import("../components/DataAnalysis/SubPages/ProjectView.vue")
+            },
+            {
+                name: "ProjectDetails",
+                path: "projectdetails/:projectname",
+                component: () => import("../components/DataAnalysis/SubPages/ProjectDetails.vue")
             },
             {
                 name: "DataAnalysis",

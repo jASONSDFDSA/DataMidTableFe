@@ -6,3 +6,10 @@ export function getProjects() {
         method: 'get',
     })
 }
+
+export function getProjectDetails(projectname) {
+    return request({
+        url: '/api/project/' + projectname,
+        method: 'get',
+    })
+}
