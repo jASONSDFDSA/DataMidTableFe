@@ -10,11 +10,11 @@
                 </template>
             </el-input>
             <div class="search-button">
-                <el-button type="primary" @click="searchMessages()" round>搜索</el-button>
-                <el-button @click="getNewMessages()" round>刷新</el-button>
+                <el-button type="primary" @click="goSearch()" round>搜索</el-button>
+                <el-button @click="refresh()" round>刷新</el-button>
             </div>
         </div>
-        <el-scrollbar height="73vh">
+        <el-scrollbar height="67vh">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -33,12 +33,17 @@
                 </div>
             </div>
         </el-scrollbar>
+        <div class="example-pagination-block">
+            <div class="inner-block">
+            <el-pagination v-model:current-page="curpage" :page-count="pages" layout="prev, pager, next" @current-change="handleCurrentChange()"/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 
-import { getMessages, deleteMessage } from '@/api/message'
+import { getMessages, deleteMessage, searchMessages, getSearchPages, getPages } from '@/api/message'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -46,6 +51,11 @@ export default {
         return {
             messages: [],
             search: '',
+            offset: 0,
+            limit: 5,
+            isSearching: false,
+            pages: 1,
+            curpage: 1
         }
     },
     methods: {
@@ -57,18 +67,69 @@ export default {
                 ElMessage.error('删除失败')
             })
         },
+        refresh() {
+            this.isSearching = false
+            this.offset = 0
+            this.curpage = 1
+            this.getNewMessages()
+        },
+        getAllPages() {
+            getPages().then(res => {
+                this.pages = res.data.pages
+                console.log(this.pages)
+            }).catch(() => {
+                ElMessage.error('获取页数失败')
+            })
+        },
         getNewMessages() {
-            getMessages().then(res => {
+            getMessages(this.offset, this.limit).then(res => {
                 this.messages = res.data.messages
             }).catch(() => {
                 ElMessage.error('获取消息失败')
             })
         },
+        goSearch() {
+            this.isSearching = true
+            this.offset = 0
+            this.curpage = 1
+            this.getSearchPages()
+            this.searchMessages()
+        },
+        getSearchPages() {
+            const params = {
+                search: this.search
+            }
+            getSearchPages(params).then(res => {
+                this.pages = res.data.pages
+                console.log(this.pages)
+            }).catch(() => {
+                ElMessage.error('获取页数失败')
+            })
+        },
         searchMessages() {
-            this.messages = this.messages.filter(message => message.title.includes(this.search))
+            const params = {
+                offset: this.offset,
+                limit: this.limit,
+                search: this.search,
+            }
+            searchMessages(params).then(res => {
+                this.messages = res.data.messages
+            }).catch(() => {
+                ElMessage.error('搜索失败')
+            })
+        },
+        handleCurrentChange() {
+            console.log(this.curpage)
+            this.offset = (this.curpage - 1) * this.limit
+            if (this.isSearching) {
+                this.searchMessages()
+            } else {
+                this.getNewMessages()
+            }
         }
     },
     beforeMount() {
+        this.getAllPages()
         this.getNewMessages()
     }
 }
@@ -99,7 +160,7 @@ export default {
 
 .message {
     margin: 10px;
-    padding: 15px;
+    padding: 10px;
     background-color: white;
     border-radius: 15px;
 }
@@ -120,5 +181,16 @@ export default {
 .message-button {
     display: flex;
     justify-content: flex-end;
+}
+.example-pagination-block {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+.inner-block {
+    width: fit-content;
+    border-radius: 10px;
+    background-color: white;
 }
 </style>

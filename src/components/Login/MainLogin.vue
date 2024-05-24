@@ -92,8 +92,7 @@
                     </div>
                 </el-form>
             </div>
-            <div v-if="isApply">
-                <!-- Get Invite Code -->
+            <!-- <div v-if="isApply">
                 <el-form :model="applyform" :rules="applyrules" ref="applyform" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="学校邮箱" prop="email">
                         <el-input v-model="applyform.email" placeholder="请输入学校邮箱"></el-input>
@@ -106,14 +105,14 @@
                         <el-button @click="reset('applyform')">重置</el-button>
                     </div>
                 </el-form>
-            </div>
+            </div> -->
         </div>
     </body>
 </template>
 
 <script>
 
-import { login, signup, apply } from '@/api/user';
+import { login, signup } /*, apply }*/ from '@/api/user';
 import storage from '@/store/storage';
 import { ElMessage } from 'element-plus';
 
@@ -137,10 +136,10 @@ export default {
                 invitecode: '',
                 identity: ''
             },
-            applyform: {
+            /* applyform: {
                 email: '',
                 reasons: ''
-            },
+            }, */
             loginrules: {
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -191,7 +190,7 @@ export default {
                     { validator: this.validatePassword2, trigger: 'blur' }
                 ],
             },
-            applyrules: {
+            /* applyrules: {
                 email: [
                     { required: true, message: '请输入学校邮箱', trigger: 'blur' },
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
@@ -203,11 +202,11 @@ export default {
                 identity: [
                     { required: true, message: '请选择身份', trigger: 'blur' }
                 ]
-            },
+            }, */
             activeName: 'first',
             isLogin: true,
             isRegister: false,
-            isApply: false,
+            // isApply: false,
             showLimit: true
         };
     },
@@ -215,7 +214,6 @@ export default {
         login(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-
                     login(this.loginform).then(response => {
                         console.log(response);
                         ElMessage({
@@ -273,36 +271,36 @@ export default {
                 }
             });
         },
-        apply(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    apply(this.applyform).then(response => {
-                        console.log(response);
-                        ElMessage({
-                            message: '申请成功，请等待审核',
-                            type: 'success',
-                            duration: 5 * 1000
-                        });
-                        this.reset('applyform');
-                        this.activeName = 'first';
-                        this.isLogin = true;
-                        this.isRegister = false;
-                        this.isApply = false;
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        getInviteCode() {
-            this.isLogin = false;
-            this.isRegister = false;
-            this.isApply = true;
-            this.activeName = '';
-        },
+        // apply(formName) {
+        //     this.$refs[formName].validate((valid) => {
+        //         if (valid) {
+        //             apply(this.applyform).then(response => {
+        //                 console.log(response);
+        //                 ElMessage({
+        //                     message: '申请成功，请等待审核',
+        //                     type: 'success',
+        //                     duration: 5 * 1000
+        //                 });
+        //                 this.reset('applyform');
+        //                 this.activeName = 'first';
+        //                 this.isLogin = true;
+        //                 this.isRegister = false;
+        //                 this.isApply = false;
+        //             }).catch(error => {
+        //                 console.log(error);
+        //             });
+        //         } else {
+        //             console.log('error submit!!');
+        //             return false;
+        //         }
+        //     });
+        // },
+        // getInviteCode() {
+        //     this.isLogin = false;
+        //     this.isRegister = false;
+        //     this.isApply = true;
+        //     this.activeName = '';
+        // },
         reset(formName) {
             if(this.$refs[formName] !== undefined && this.$refs[formName] !== null)
                 this.$refs[formName].resetFields();
@@ -312,15 +310,15 @@ export default {
             if (tab.props.name === 'first') {
                 this.isLogin = true;
                 this.isRegister = false;
-                this.isApply = false;
+                // this.isApply = false;
                 this.reset('registerform');
-                this.reset('applyform');
+                // this.reset('applyform');
             } else {
                 this.isLogin = false;
                 this.isRegister = true;
-                this.isApply = false;
+                // this.isApply = false;
                 this.reset('loginform');
-                this.reset('applyform');
+                // this.reset('applyform');
             }
         },
         validatePassword2(rule, value, callback) {

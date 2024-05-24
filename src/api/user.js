@@ -27,13 +27,13 @@ export function signup(data) {
 }
 
 // Apply for admin
-export function apply(data) {
-    return request({
-        url: '/api/auth/apply',
-        method: 'post',
-        data
-    })
-}
+// export function apply(data) {
+//     return request({
+//         url: '/api/auth/apply',
+//         method: 'post',
+//         data
+//     })
+// }
 
 // Change password
 export function changePassword(data) {
