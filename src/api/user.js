@@ -17,13 +17,6 @@ export function getInfo() {
     })
 }
 
-export function logout() {
-    return request({
-        url: '/api/user/logout',
-        method: 'post'
-    })
-}
-
 // Signup
 export function signup(data) {
     return request({

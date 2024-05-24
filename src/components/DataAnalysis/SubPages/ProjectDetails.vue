@@ -1,7 +1,11 @@
 <template>
     <el-scrollbar height="80vh">
         <div class="pd-header">
-            
+            <!-- Project Logo and Name -->
+            <div class="pd-logo">
+                <img :src="projectDetail.logo" alt="logo" />
+                <h1>{{ projectDetail.projectName }}</h1>
+                </div>
         </div>
     </el-scrollbar>
 </template>

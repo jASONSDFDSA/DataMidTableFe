@@ -23,6 +23,9 @@
                 <div class="message-footer">
                     <h3>通知者：{{ message.author }}</h3>
                 </div>
+                <div class="message-footer">
+                    <h3>时间：{{ message.time }}</h3>
+                </div>
                 <div class="message-button">
                     <el-button type="danger" @click="deleteMessage(message.id)">删除</el-button>
                 </div>
