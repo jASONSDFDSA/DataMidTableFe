@@ -1,11 +1,83 @@
 <template>
     <el-scrollbar height="80vh">
+        <!-- Project Logo and Name -->
         <div class="pd-header">
-            <!-- Project Logo and Name -->
-            <div class="pd-logo">
-                <img :src="projectDetail.logo" alt="logo" />
-                <h1>{{ projectDetail.projectName }}</h1>
+            <img :src="projectDetail.logo" alt="logo"
+                style="width: 150px; height: 150px; border-radius: 10px; margin:auto;" />
+            <div class="pd-intro">
+                <div class="pd-name">
+                    <h1>{{ projectDetail.projectName }}</h1>
+                    <el-button type="danger" @click="goBack()">返回</el-button>
                 </div>
+                <p class="pd-desc">{{ projectDetail.description }}</p>
+            </div>
+        </div>
+        <div class="pd-body">
+            <div>
+                <h2 style="display:flex;align-items: center;"><el-icon :style="iconStyle">
+                        <user />
+                    </el-icon>项目成员</h2>
+                <el-descriptions v-for="member in projectDetail.members" :key="member.id" class="margin-top"
+                    :title="member.name" :column="3" size="default" border>
+                    <el-descriptions-item width="fit-content" align="center">
+                        <template #label>
+                            <div class="cell-item">
+                                <el-icon>
+                                    <iphone />
+                                </el-icon>
+                                电话
+                            </div>
+                        </template>
+                        {{ member.phone }}
+                    </el-descriptions-item>
+                    <el-descriptions-item width="fit-content" align="center">
+                        <template #label>
+                            <div class="cell-item">
+                                <el-icon :style="iconStyle">
+                                    <Message />
+                                </el-icon>
+                                电子邮箱
+                            </div>
+                        </template>
+                        <div style="width:150px">
+                            {{ member.email }}
+                        </div>
+                    </el-descriptions-item>
+                    <el-descriptions-item width="fit-content" align="center">
+                        <template #label>
+                            <div class="cell-item">
+                                <el-icon :style="iconStyle">
+                                    <tickets />
+                                </el-icon>
+                                职务
+                            </div>
+                        </template>
+                        <div style="width:50px">
+                            <el-tag size="small">{{ member.job }}</el-tag>
+                        </div>
+                    </el-descriptions-item>
+                </el-descriptions>
+            </div>
+            <div class="pd-data">
+                <h2 style="display: flex; align-items: center; margin-top: 20px;"><el-icon :style="iconStyle">
+                        <Coin />
+                    </el-icon>数据</h2>
+
+                <div v-for="table in projectDetail.tables" :key="table.id">
+                    <div class="pd-table">
+                        <h3>{{ table.tableName }}</h3>
+                        <p>{{ table.tableDesc }}</p>
+                    </div>
+                    <el-table :data="table.columns" max-height="250" style="width: 100%">
+                        <el-table-column prop="columnName" label="列名" width="100" />
+                        <el-table-column prop="columnType" label="属性" width="100" />
+                        <el-table-column prop="isPrimaryKey" label="主键" width="70" />
+                        <el-table-column prop="isForeignKey" label="外键" width="70" />
+                        <el-table-column prop="isNotNull" label="空类型" width="70" />
+                        <el-table-column prop="desc" label="描述" />
+                    </el-table>
+                </div>
+            </div>
         </div>
     </el-scrollbar>
 </template>
@@ -22,9 +94,34 @@ export default {
         getProjectDetails() {
             getProjectDetails(this.$route.params.projectname).then(res => {
                 this.projectDetail = res.data.projectDetail
+                this.handleBoolean()
             }).catch(() => {
                 this.$message.error('获取项目详情失败')
             })
+        },
+        handleBoolean() {
+            for (let i = 0; i < this.projectDetail.tables.length; i++) {
+                for (let j = 0; j < this.projectDetail.tables[i].columns.length; j++) {
+                    if (this.projectDetail.tables[i].columns[j].isPrimaryKey) {
+                        this.projectDetail.tables[i].columns[j].isPrimaryKey = '√'
+                    } else {
+                        this.projectDetail.tables[i].columns[j].isPrimaryKey = ''
+                    }
+                    if (this.projectDetail.tables[i].columns[j].isForeignKey) {
+                        this.projectDetail.tables[i].columns[j].isForeignKey = '√'
+                    } else {
+                        this.projectDetail.tables[i].columns[j].isForeignKey = ''
+                    }
+                    if (this.projectDetail.tables[i].columns[j].isNotNull) {
+                        this.projectDetail.tables[i].columns[j].isNotNull = '√'
+                    } else {
+                        this.projectDetail.tables[i].columns[j].isNotNull = ''
+                    }
+                }
+            }
+        },
+        goBack() {
+            this.$router.push({ name: 'ProjectView' })
         }
     },
     beforeMount() {
@@ -32,3 +129,59 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.pd-header {
+    margin: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.pd-intro {
+    width: 80%;
+    font-size: 20px;
+}
+
+.pd-name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pd-desc {
+    font-size: 16px;
+    border: 1px #000 solid;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.pd-body {
+    margin: auto;
+    width: 80%;
+    font-size: 20px;
+}
+
+.el-descriptions {
+    margin-top: 20px;
+}
+
+.cell-item {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
+
+.margin-top {
+    margin-top: 20px;
+    width: fit-content;
+}
+
+.pd-data {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.pd-table {
+    margin-top: 20px;
+    font-size: 16px;
+}
+</style>

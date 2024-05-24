@@ -1,27 +1,32 @@
 <template>
     <div>
-        <el-container class="container">    
+        <el-container class="container">
             <el-header class="header">
                 <title>Analyzer</title>
-                <div class="header-name"><h1><el-icon><DataAnalysis /></el-icon>&nbsp;数据分析</h1></div>
+                <div class="header-name">
+                    <h1><el-icon>
+                            <DataAnalysis />
+                        </el-icon>&nbsp;数据分析</h1>
+                </div>
                 <div class="header-button">
+                    <h2 style="color: white; width:200px">欢迎，{{ storage.get('user').username }}</h2>
                     <el-button type="danger" @click="logout()">退出登录</el-button>
                     <el-button @click="showChangePwd()">修改密码</el-button>
                 </div>
             </el-header>
             <el-container>
                 <el-aside width="200px" class="aside">
-                    <el-menu
-                        active-text-color="#ffd04b"
-                        background-color="#545c64"
-                        class="aside-menu"
-                        default-active="1"
-                        text-color="#fff"
-                        @select="handleSelect"
-                    >
-                        <el-menu-item index="1" class="menu-item"><el-icon><Message /></el-icon>通知</el-menu-item>   
-                        <el-menu-item index="2" class="menu-item"><el-icon><DataBoard /></el-icon>浏览项目</el-menu-item>
-                        <el-menu-item index="3" class="menu-item"><el-icon><Histogram /></el-icon>数据分析</el-menu-item>
+                    <el-menu active-text-color="#ffd04b" background-color="#545c64" class="aside-menu"
+                        default-active="1" text-color="#fff" @select="handleSelect">
+                        <el-menu-item index="1" class="menu-item"><el-icon>
+                                <Message />
+                            </el-icon>通知</el-menu-item>
+                        <el-menu-item index="2" class="menu-item"><el-icon>
+                                <DataBoard />
+                            </el-icon>浏览项目</el-menu-item>
+                        <el-menu-item index="3" class="menu-item"><el-icon>
+                                <Histogram />
+                            </el-icon>数据分析</el-menu-item>
                     </el-menu>
                 </el-aside>
 
@@ -46,7 +51,7 @@
                     </div>
                 </el-main>
             </el-container>
-            
+
         </el-container>
     </div>
 
@@ -78,15 +83,18 @@ export default {
                 ],
                 confirmPwd: [
                     { required: true, message: '请再次输入新密码', trigger: 'blur' },
-                    { validator: (rule, value, callback) => {
-                        if (value !== this.changePwdForm.newPwd) {
-                            callback(new Error('两次密码不一致'))
-                        } else {
-                            callback()
-                        }
-                    }, trigger: 'blur' }
+                    {
+                        validator: (rule, value, callback) => {
+                            if (value !== this.changePwdForm.newPwd) {
+                                callback(new Error('两次密码不一致'))
+                            } else {
+                                callback()
+                            }
+                        }, trigger: 'blur'
+                    }
                 ]
-            }
+            },
+            storage: storage
         }
     },
     methods: {
@@ -95,11 +103,11 @@ export default {
             // console.log(key, keyPath)
             // console.log('handleselect')
             if (key === '1') {
-                this.$router.push({name: 'Message'});
+                this.$router.push({ name: 'Message' });
             } else if (key === '2') {
-                this.$router.push({name: 'ProjectView'});
+                this.$router.push({ name: 'ProjectView' });
             } else if (key === '3') {
-                this.$router.push({name: 'DataAnalysis'});
+                this.$router.push({ name: 'DataAnalysis' });
             }
         },
         logout() {
@@ -151,57 +159,65 @@ export default {
 </script>
 
 <style>
-    .container {
-        height: 100vh;
-    }
-    .header {
-        display: flex;
-        background-color: black;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        height: 100px;
-    }
-    .header-name {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        height: 100%;
-        margin-left: 30px;
-        font-size: 26px;
-    }
-    .header-button {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 100%;
-        margin-right: 30px;
-    }
-    .aside {
-        height: 100%;
-    }
-    .aside-menu {
-        width: 100%;
-    }
-    .menu-item {
-        font-size: 18px;
-    }
-    .pwdBox {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 400px;
-        height: fit-content;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-    .center {
-        display: flex;
-        justify-content: center;
-    }
+.container {
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    background-color: black;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+}
+
+.header-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 100%;
+    margin-left: 30px;
+    font-size: 26px;
+}
+
+.header-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    margin-right: 30px;
+}
+
+.aside {
+    height: 100%;
+}
+
+.aside-menu {
+    width: 100%;
+}
+
+.menu-item {
+    font-size: 18px;
+}
+
+.pwdBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
 </style>

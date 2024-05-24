@@ -10,6 +10,7 @@
                         </el-icon>&nbsp;项目开发</h1>
                 </div>
                 <div class="header-button">
+                    <h2 style="color: white; width:200px">欢迎，{{ storage.get('user').username }}</h2>
                     <el-button type="danger" @click="logout()">退出登录</el-button>
                     <el-button @click="showChangePwd()">修改密码</el-button>
                 </div>
@@ -94,7 +95,8 @@ export default {
                         }, trigger: 'blur'
                     }
                 ]
-            }
+            },
+            storage: storage
         }
     },
     methods: {

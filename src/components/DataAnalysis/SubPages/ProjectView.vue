@@ -3,7 +3,9 @@
         <div class="search">
             <el-input v-model="search" placeholder="请输入项目名称">
                 <template #prefix>
-                    <el-icon><Search /></el-icon>
+                    <el-icon>
+                        <Search />
+                    </el-icon>
                 </template>
             </el-input>
             <div class="search-button">
@@ -15,7 +17,8 @@
             <div v-for="project in projects" :key="project.id" class="project">
                 <el-row>
                     <el-col :span="2">
-                        <img :src="project.image" alt="project" style="width: 100px; height: 100px; border-radius: 10px; margin:auto;">
+                        <img :src="project.image" alt="project"
+                            style="width: 100px; height: 100px; border-radius: 10px; margin:auto;">
                     </el-col>
                     <el-col :span="20">
                         <div class="project-header">
@@ -60,7 +63,7 @@ export default {
             this.projects = this.projects.filter(project => project.title.includes(this.search))
         },
         watchDetails(title) {
-            this.$router.push({ name:'ProjectDetails', params: { projectname: title } })
+            this.$router.push({ name: 'ProjectDetails', params: { projectname: title } })
         }
     },
     beforeMount() {
@@ -72,11 +75,12 @@ export default {
 
 <style scoped>
 .body {
-    height:auto;
+    height: auto;
     background-color: grey;
     border-radius: 15px;
     padding: auto;
 }
+
 .search {
     display: flex;
     justify-content: center;
@@ -84,23 +88,28 @@ export default {
     width: 80%;
     margin: auto;
 }
+
 .search-button {
     margin: 10px;
     display: flex;
     align-items: center;
 }
+
 .project {
     background-color: white;
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
 }
+
 .project-header {
     font-size: 22px;
 }
+
 .project-body {
     display: flex;
 }
+
 .project-button {
     height: 100%;
     display: flex;

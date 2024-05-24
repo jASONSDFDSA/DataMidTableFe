@@ -4,7 +4,9 @@
         <div class="search">
             <el-input v-model="search" placeholder="请输入消息标题">
                 <template #prefix>
-                    <el-icon><Search /></el-icon>
+                    <el-icon>
+                        <Search />
+                    </el-icon>
                 </template>
             </el-input>
             <div class="search-button">
@@ -21,10 +23,10 @@
                     <p>{{ message.content }}</p>
                 </div>
                 <div class="message-footer">
-                    <h3>通知者：{{ message.author }}</h3>
-                </div>
-                <div class="message-footer">
-                    <h3>时间：{{ message.time }}</h3>
+                    <div>
+                        <h4>通知者：{{ message.author }}</h4>
+                        <h4>时间：{{ message.time }}</h4>
+                    </div>
                 </div>
                 <div class="message-button">
                     <el-button type="danger" @click="deleteMessage(message.id)">删除</el-button>
@@ -75,11 +77,12 @@ export default {
 
 <style scoped>
 .body {
-    height:auto;
+    height: auto;
     background-color: grey;
     border-radius: 15px;
     padding: auto;
 }
+
 .search {
     display: flex;
     justify-content: center;
@@ -87,27 +90,33 @@ export default {
     width: 80%;
     margin: auto;
 }
+
 .search-button {
     margin: 10px;
     display: flex;
     align-items: center;
 }
+
 .message {
     margin: 10px;
     padding: 15px;
     background-color: white;
     border-radius: 15px;
 }
+
 .message-header {
     font-size: 22px;
 }
+
 .message-body {
     margin-top: 10px;
 }
+
 .message-footer {
     display: flex;
     justify-content: flex-end;
 }
+
 .message-button {
     display: flex;
     justify-content: flex-end;

@@ -284,6 +284,7 @@ export default {
                             duration: 5 * 1000
                         });
                         this.reset('applyform');
+                        this.activeName = 'first';
                         this.isLogin = true;
                         this.isRegister = false;
                         this.isApply = false;
