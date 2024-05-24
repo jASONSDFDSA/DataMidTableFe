@@ -11,10 +11,13 @@ export function getMessages(offset, limit) {
     })
 }
 
-export function getPages() {
+export function getPages(limit) {
     return request({
         url: '/api/message/pages',
-        method: 'get'
+        method: 'get',
+        params: {
+            limit: limit
+        }
     })
 }
 

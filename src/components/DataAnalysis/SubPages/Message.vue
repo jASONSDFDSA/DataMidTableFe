@@ -14,7 +14,7 @@
                 <el-button @click="refresh()" round>刷新</el-button>
             </div>
         </div>
-        <el-scrollbar height="67vh">
+        <el-scrollbar height="66vh">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -74,7 +74,7 @@ export default {
             this.getNewMessages()
         },
         getAllPages() {
-            getPages().then(res => {
+            getPages(this.limit).then(res => {
                 this.pages = res.data.pages
                 console.log(this.pages)
             }).catch(() => {
@@ -97,7 +97,8 @@ export default {
         },
         getSearchPages() {
             const params = {
-                search: this.search
+                search: this.search,
+                limit: this.limit
             }
             getSearchPages(params).then(res => {
                 this.pages = res.data.pages
@@ -185,12 +186,11 @@ export default {
 .example-pagination-block {
     width: 100%;
     margin-top: 10px;
+    padding: 5px;
     display: flex;
     justify-content: center;
 }
 .inner-block {
     width: fit-content;
-    border-radius: 10px;
-    background-color: white;
 }
 </style>
