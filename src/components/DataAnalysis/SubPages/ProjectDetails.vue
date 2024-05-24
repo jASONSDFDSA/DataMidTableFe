@@ -13,6 +13,7 @@
             </div>
         </div>
         <div class="pd-body">
+            <div class="line" />
             <div>
                 <h2 style="display:flex;align-items: center;"><el-icon :style="iconStyle">
                         <user />
@@ -58,6 +59,7 @@
                     </el-descriptions-item>
                 </el-descriptions>
             </div>
+            <div class="line" />
             <div class="pd-data">
                 <h2 style="display: flex; align-items: center; margin-top: 20px;"><el-icon :style="iconStyle">
                         <Coin />
@@ -134,7 +136,7 @@ export default {
 .pd-header {
     margin: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .pd-intro {
@@ -156,7 +158,7 @@ export default {
 
 .pd-body {
     margin: auto;
-    width: 80%;
+    width: 88%;
     font-size: 20px;
 }
 
@@ -176,12 +178,17 @@ export default {
 }
 
 .pd-data {
-    margin-top: 20px;
     font-size: 20px;
 }
 
 .pd-table {
     margin-top: 20px;
     font-size: 16px;
+}
+
+.line {
+    width: 100%;
+    margin: 20px auto;
+    border-top: 1px solid gray;
 }
 </style>
