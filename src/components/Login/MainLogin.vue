@@ -24,6 +24,9 @@
                         <el-button type="primary" @click="login('loginform')">登录</el-button>
                         <el-button @click="reset('loginform')">重置</el-button>
                     </div>
+                    <div class="center" v-if="isLoading">
+                        <el-icon><Loading /></el-icon>
+                    </div>
                 </el-form>
             </div>
             <div v-if="isRegister">
@@ -50,6 +53,9 @@
                         <el-form-item label="确认密码" prop="password2">
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
+                        <el-form-item label="邀请码" prop="invitecode">
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input><!--<el-button @click="getInviteCode()">获取邀请码</el-button>-->
+                        </el-form-item>
                     </div>
                     <div v-if="registerform.identity==='Admin'">
                         <el-form-item label="用户名" prop="username">
@@ -62,7 +68,7 @@
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
                         <el-form-item label="邀请码" prop="invitecode">
-                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input><el-button @click="getInviteCode()">获取邀请码</el-button>
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input>
                         </el-form-item>
                     </div>
                     <div v-if="registerform.identity==='Developer'">
@@ -78,12 +84,15 @@
                         <el-form-item label="确认密码" prop="password2">
                             <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
                         </el-form-item>
+                        <el-form-item label="邀请码" prop="invitecode">
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input>
+                        </el-form-item>
                     </div>
                     <div class="center">
                         <el-radio-group v-model="registerform.identity">
-                            <el-radio value="Analyzer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
-                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
-                            <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
+                            <el-radio value="Analyzer" @click="reset('registerform')"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
+                            <el-radio value="Admin" @click="reset('registerform')"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
+                            <el-radio value="Developer" @click="reset('registerform')"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
                     <div class="center">
@@ -165,7 +174,7 @@ export default {
                 ],
                 invitecode: [
                     { required: true, message: '请输入邀请码', trigger: 'blur' },
-                    { pattern:/^[0-9]{5}$/ , message: '长度为5个字符', trigger: 'blur'}
+                    { pattern:/^[a-zA-Z0-9]{6}$/ , message: '长度为6个字符', trigger: 'blur'}
                 ],
                 email: [
                     { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -207,11 +216,13 @@ export default {
             isLogin: true,
             isRegister: false,
             // isApply: false,
-            showLimit: true
+            showLimit: true,
+            isLoading: false
         };
     },
     methods: {
         login(formName) {
+            this.isLoading = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     login(this.loginform).then(response => {
@@ -236,7 +247,9 @@ export default {
 
                     }).catch(error => {
                         console.log(error);
-                    });
+                    }).finally(() => {
+                        this.isLoading = false;
+                    })
 
                 } else {
                     ElMessage({
@@ -244,6 +257,7 @@ export default {
                         type: 'error',
                         duration: 5 * 1000
                     });
+                    this.isLoading = false;
                     return false;
                 }
             });
@@ -251,6 +265,8 @@ export default {
         signup(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if(this.registerform.projectname !== '')
+                        this.registerform.username = this.registerform.projectname
                     signup(this.registerform).then(response => {
                         console.log(response);
                         ElMessage({
@@ -259,6 +275,7 @@ export default {
                             duration: 5 * 1000
                         });
                         this.reset('registerform');
+                        this.activeName = 'first';
                         this.isLogin = true;
                         this.isRegister = false;
                         this.isApply = false;
@@ -341,7 +358,8 @@ export default {
                         id: this.registerrules.id,
                         name: this.registerrules.name,
                         password1: this.registerrules.password1,
-                        password2: this.registerrules.password2
+                        password2: this.registerrules.password2,
+                        invitecode: this.registerrules.invitecode
                     };
                 case 'Admin':
                     return {
@@ -357,7 +375,8 @@ export default {
                         projectname: this.registerrules.projectname,
                         email: this.registerrules.email,
                         password1: this.registerrules.password1,
-                        password2: this.registerrules.password2
+                        password2: this.registerrules.password2,
+                        invitecode: this.registerrules.invitecode
                     };
                 default:
                     return null;

@@ -15,7 +15,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://127.0.0.1:4523/m1/4460073-4106165-default'
+      //'/api': 'http://127.0.0.1:4523/m1/4460073-4106165-default'
+      '/api': 'http://2d5fc00d.r20.cpolar.top'
     }
   }
 })

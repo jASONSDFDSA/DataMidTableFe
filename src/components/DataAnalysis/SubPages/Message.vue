@@ -12,6 +12,9 @@
             <div class="search-button">
                 <el-button type="primary" @click="goSearch()" round>搜索</el-button>
                 <el-button @click="refresh()" round>刷新</el-button>
+                <div v-if="isLoading">
+                    <el-icon><Loading /></el-icon>
+                </div>
             </div>
         </div>
         <el-scrollbar height="66vh">
@@ -55,37 +58,48 @@ export default {
             limit: 5,
             isSearching: false,
             pages: 1,
-            curpage: 1
+            curpage: 1,
+            isLoading: false
         }
     },
     methods: {
         deleteMessage(id) {
+            this.isLoading = true
             deleteMessage(id).then(() => {
                 ElMessage.success('删除成功')
                 this.messages = this.messages.filter(message => message.id !== id)
             }).catch(() => {
                 ElMessage.error('删除失败')
+            }).finally(() => {
+                this.isLoading = false
             })
         },
         refresh() {
             this.isSearching = false
             this.offset = 0
             this.curpage = 1
+            this.getAllPages()
             this.getNewMessages()
         },
         getAllPages() {
+            this.isLoading = true
             getPages(this.limit).then(res => {
                 this.pages = res.data.pages
                 console.log(this.pages)
             }).catch(() => {
                 ElMessage.error('获取页数失败')
+            }).finally(() => {
+                this.isLoading = false
             })
         },
         getNewMessages() {
+            this.isLoading = true
             getMessages(this.offset, this.limit).then(res => {
                 this.messages = res.data.messages
             }).catch(() => {
                 ElMessage.error('获取消息失败')
+            }).finally(() => {
+                this.isLoading = false
             })
         },
         goSearch() {
@@ -96,6 +110,7 @@ export default {
             this.searchMessages()
         },
         getSearchPages() {
+            this.isLoading = true
             const params = {
                 search: this.search,
                 limit: this.limit
@@ -105,9 +120,12 @@ export default {
                 console.log(this.pages)
             }).catch(() => {
                 ElMessage.error('获取页数失败')
+            }).finally(() => {
+                this.isLoading = false
             })
         },
         searchMessages() {
+            this.isLoading = true
             const params = {
                 offset: this.offset,
                 limit: this.limit,
@@ -117,6 +135,8 @@ export default {
                 this.messages = res.data.messages
             }).catch(() => {
                 ElMessage.error('搜索失败')
+            }).finally(() => {
+                this.isLoading = false
             })
         },
         handleCurrentChange() {

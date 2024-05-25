@@ -128,11 +128,6 @@ export default {
         },
         changePassword() {
             this.$refs.changePwdForm.validate((valid) => {
-                if (storage.get('user').password !== this.changePwdForm.oldPwd) {
-                    ElMessage.error('原密码错误')
-                    console.log(storage.get('user').password, this.changePwdForm.oldPwd)
-                    return false
-                }
                 if (this.changePwdForm.oldPwd === this.changePwdForm.newPwd) {
                     ElMessage.error('新密码不能与原密码相同')
                     return false
@@ -143,13 +138,16 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        changePassword(this.changePwdForm.newPwd).then(() => {
+                        changePassword(this.changePwdForm).then(() => {
                             const user = storage.get('user')
                             user.password = this.changePwdForm.newPwd
                             storage.set('user', user)
                             // console.log(storage.get('user'))
                             this.clearPwdBox()
                             ElMessage.success('修改成功')
+                        }).catch(() => {
+                            this.clearPwdBox()
+                            ElMessage.error('修改失败')
                         })
                     }).catch(() => {
                         this.clearPwdBox()

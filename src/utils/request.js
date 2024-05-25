@@ -11,7 +11,7 @@ service.interceptors.request.use(
         if (storage.get('token')) {
             config.headers['Authorization'] = storage.get('token');
         }
-        console.log(config);
+        // console.log(config);
         return config;
     },
     error => {

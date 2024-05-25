@@ -6,7 +6,7 @@
                 style="width: 150px; height: 150px; border-radius: 10px; margin:auto;" />
             <div class="pd-intro">
                 <div class="pd-name">
-                    <h1>{{ projectDetail.projectName }}</h1>
+                    <h1>{{ projectDetail.projectname }}</h1>
                     <el-button type="danger" @click="goBack()">返回</el-button>
                 </div>
                 <p class="pd-desc">{{ projectDetail.description }}</p>
@@ -15,7 +15,7 @@
         <div class="pd-body">
             <div class="line" />
             <div>
-                <h2 style="display:flex;align-items: center;"><el-icon :style="iconStyle">
+                <h2 style="display:flex;align-items: center;"><el-icon>
                         <user />
                     </el-icon>项目成员</h2>
                 <el-descriptions v-for="member in projectDetail.members" :key="member.id" class="margin-top"
@@ -34,7 +34,7 @@
                     <el-descriptions-item width="fit-content" align="center">
                         <template #label>
                             <div class="cell-item">
-                                <el-icon :style="iconStyle">
+                                <el-icon>
                                     <Message />
                                 </el-icon>
                                 电子邮箱
@@ -47,13 +47,13 @@
                     <el-descriptions-item width="fit-content" align="center">
                         <template #label>
                             <div class="cell-item">
-                                <el-icon :style="iconStyle">
+                                <el-icon>
                                     <tickets />
                                 </el-icon>
                                 职务
                             </div>
                         </template>
-                        <div style="width:50px">
+                        <div style="width:80px">
                             <el-tag size="small">{{ member.job }}</el-tag>
                         </div>
                     </el-descriptions-item>
@@ -61,7 +61,7 @@
             </div>
             <div class="line" />
             <div class="pd-data">
-                <h2 style="display: flex; align-items: center; margin-top: 20px;"><el-icon :style="iconStyle">
+                <h2 style="display: flex; align-items: center; margin-top: 20px;"><el-icon>
                         <Coin />
                     </el-icon>数据</h2>
 
@@ -86,6 +86,7 @@
 
 <script>
 import { getProjectDetails } from '@/api/projectView'
+import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
@@ -97,12 +98,28 @@ export default {
             getProjectDetails(this.$route.params.projectname).then(res => {
                 this.projectDetail = res.data.projectDetail
                 this.handleBoolean()
-            }).catch(() => {
-                this.$message.error('获取项目详情失败')
+            }).catch(err => {
+                console.log(err)
+                // ElMessage.error('获取项目详情失败')
             })
         },
+        isEmptyObject(obj) {
+            if(typeof obj === 'object' && obj != null && Object.keys(obj).length !== 0){
+                return false;
+            } else {
+                return true;
+            }
+        },
         handleBoolean() {
+            if (!this.projectDetail.tables.length) {
+                ElMessage.info('该项目暂无数据')
+                return
+            }
             for (let i = 0; i < this.projectDetail.tables.length; i++) {
+                if (this.isEmptyObject(this.projectDetail.tables[i].columns)) {
+                    ElMessage.info('表'+ this.projectDetail.tables[i].tableName + '暂无数据')
+                    continue
+                }
                 for (let j = 0; j < this.projectDetail.tables[i].columns.length; j++) {
                     if (this.projectDetail.tables[i].columns[j].isPrimaryKey) {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = '√'
