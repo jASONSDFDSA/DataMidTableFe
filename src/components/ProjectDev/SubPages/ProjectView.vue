@@ -9,11 +9,8 @@
                 </template>
             </el-input>
             <div class="search-button">
-                <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
-                <el-button @click="refresh()" round>刷新</el-button>
-                <div v-if="isLoading">
-                    <el-icon><Loading /></el-icon>
-                </div>
+                <el-button color="#529b2e" @click="searchProjects()" round>搜索</el-button>
+                <el-button @click="getNewProjects()" round>刷新</el-button>
             </div>
         </div>
         <el-scrollbar height="72vh">
@@ -49,7 +46,7 @@
 </template>
 
 <script>
-import { getProjects, getProjectPages, searchProjects, getSearchProjectPages } from '@/api/projectView'
+import { getProjects, getProjectPages, getSearchProjectPages, searchProjects } from '@/api/projectView'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -139,7 +136,7 @@ export default {
             }
         },
         watchDetails(title) {
-            this.$router.push({ name: 'AnalyzerProjectDetails', params: { projectname: title } })
+            this.$router.push({ name: 'DeveloperProjectDetails', params: { projectname: title } })
         }
     },
     beforeMount() {

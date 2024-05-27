@@ -4,6 +4,8 @@
             <el-header class="header">
                 <title>Analyzer</title>
                 <div class="header-name">
+                    <img src="https://www.sysu.edu.cn/images/zhuzhanLOGO.png" alt="logo" style="width: 125px; height: 36px;">
+                    &nbsp;&nbsp;&nbsp;
                     <h1><el-icon>
                             <DataAnalysis />
                         </el-icon>&nbsp;数据分析</h1>
@@ -16,8 +18,8 @@
             </el-header>
             <el-container>
                 <el-aside width="200px" class="aside">
-                    <el-menu active-text-color="#ffd04b" background-color="#545c64" class="aside-menu"
-                        default-active="1" text-color="#fff" @select="handleSelect">
+                    <el-menu active-text-color="#005826" background-color="white" class="aside-menu"
+                        default-active="1" text-color="#000" @select="handleSelect">
                         <el-menu-item index="1" class="menu-item"><el-icon>
                                 <Message />
                             </el-icon>通知</el-menu-item>
@@ -44,7 +46,7 @@
                                 <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
                             </el-form-item>
                             <div class="center">
-                                <el-button type="primary" @click="changePassword()">修改密码</el-button>
+                                <el-button color="#529b2e" @click="changePassword()">修改密码</el-button>
                                 <el-button type="danger" @click="clearPwdBox()">取消</el-button>
                             </div>
                         </el-form>
@@ -103,11 +105,11 @@ export default {
             // console.log(key, keyPath)
             // console.log('handleselect')
             if (key === '1') {
-                this.$router.push({ name: 'Message' });
+                this.$router.push({ name: 'AnalyzerMessage' });
             } else if (key === '2') {
-                this.$router.push({ name: 'ProjectView' });
+                this.$router.push({ name: 'AnalyzerProjectView' });
             } else if (key === '3') {
-                this.$router.push({ name: 'DataAnalysis' });
+                this.$router.push({ name: 'AnalyzerDataAnalysis' });
             }
         },
         logout() {
@@ -165,22 +167,22 @@ export default {
 
 .header {
     display: flex;
-    background-color: black;
+    background-color: #005826;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 100px;
+    height: 60px;
 }
 
 .header-name {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     color: white;
     height: 100%;
     margin-left: 30px;
-    font-size: 26px;
+    font-size: 16px;
 }
 
 .header-button {
@@ -201,6 +203,7 @@ export default {
 
 .menu-item {
     font-size: 18px;
+    font-weight: bold;
 }
 
 .pwdBox {

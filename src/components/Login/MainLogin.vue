@@ -1,6 +1,9 @@
 <template>
     <body>
         <div class="form-box">
+            <div class="Logo">
+                <img src="https://www.sysu.edu.cn/images/logo1.png" alt="SYSU" style="width:100%;height:100%;">
+            </div>
             <el-tabs class="tabs-title" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="登录" name="first"><h1 class="login-title">登录</h1></el-tab-pane>
                 <el-tab-pane label="注册" name="second"><h1 class="login-title">注册</h1></el-tab-pane>
@@ -21,8 +24,8 @@
                         </el-radio-group>
                     </div>
                     <div class="center">
-                        <el-button type="primary" @click="login('loginform')">登录</el-button>
-                        <el-button @click="reset('loginform')">重置</el-button>
+                        <el-button type="success" color="#529b2e" @click="login('loginform')">登录</el-button>
+                        <el-button type="danger" @click="reset('loginform')">重置</el-button>
                     </div>
                     <div class="center" v-if="isLoading">
                         <el-icon><Loading /></el-icon>
@@ -96,8 +99,8 @@
                         </el-radio-group>
                     </div>
                     <div class="center">
-                        <el-button type="primary" @click="signup('registerform')">注册</el-button>
-                        <el-button @click="reset('registerform')">重置</el-button>
+                        <el-button type="success" color="#529b2e" @click="signup('registerform')">注册</el-button>
+                        <el-button type="danger" @click="reset('registerform')">重置</el-button>
                     </div>
                 </el-form>
             </div>
@@ -390,7 +393,15 @@ export default {
 body {
     position: relative;
     height: 100vh;
-    background-color: #000000;
+    background-image: url(https://sse.sysu.edu.cn/sites/sse.prod.dpcms4.sysu.edu.cn/files/inline-images/image_275.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.Logo {
+    margin: 10px auto;
+    width: 200px;
 }
 
 .tabs-title {
@@ -416,7 +427,7 @@ body {
 .demo-ruleForm {
     width: 400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 .center {
@@ -426,4 +437,5 @@ body {
     justify-content: center;
     align-items: center;                                                                                                                                                                         
 }
+
 </style>

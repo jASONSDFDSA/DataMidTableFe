@@ -13,23 +13,23 @@ const routes = [
         component: () => import("../components/DataAnalysis/MainAnalyzer.vue"),
         children: [
             {
-                name: "Message",
+                name: "AnalyzerMessage",
                 path: "message",
                 alias: "",
                 component: () => import("../components/DataAnalysis/SubPages/Message.vue")
             },
             {
-                name: "ProjectView",
+                name: "AnalyzerProjectView",
                 path: "projectview",
                 component: () => import("../components/DataAnalysis/SubPages/ProjectView.vue")
             },
             {
-                name: "ProjectDetails",
+                name: "AnalyzerProjectDetails",
                 path: "projectdetails/:projectname",
                 component: () => import("../components/DataAnalysis/SubPages/ProjectDetails.vue")
             },
             {
-                name: "DataAnalysis",
+                name: "AnalyzerDataAnalysis",
                 path: "dataanalysis",
                 component: () => import("../components/DataAnalysis/SubPages/DataAnalysis.vue")
             }
@@ -43,7 +43,25 @@ const routes = [
     {
         name: "Developer",
         path: "/developer/:projectname",
-        component: () => import("../components/ProjectDev/MainProjectDev.vue")
+        component: () => import("../components/ProjectDev/MainProjectDev.vue"),
+        children: [
+            {
+                name: "DeveloperMessage",
+                path: "message",
+                alias: "",
+                component: () => import("../components/ProjectDev/SubPages/Message.vue")
+            },
+            {
+                name: "DeveloperProjectView",
+                path: "projectview",
+                component: () => import("../components/ProjectDev/SubPages/ProjectView.vue")
+            },
+            {
+                name: "DeveloperProjectDetails",
+                path: "projectdetails",
+                component: () => import("../components/ProjectDev/SubPages/ProjectDetails.vue")
+            }
+        ]
     }
 ]
 

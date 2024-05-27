@@ -1,4 +1,16 @@
 <template>
+    <div class="apply-choose" v-if="isApplying">
+        <el-select v-model="authType" placeholder="请选择权限类别" style="width: 240px">
+            <el-option
+                v-for="item in applyOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+        </el-select>
+        <el-button type="danger" @click="cancelApply()">取消</el-button>
+        <el-button type="success" @click="confirmApply()">确定</el-button>
+    </div>
     <el-scrollbar height="80vh">
         <!-- Project Logo and Name -->
         <div class="pd-header">
@@ -67,7 +79,10 @@
 
                 <div v-for="table in projectDetail.tables" :key="table.id">
                     <div class="pd-table">
-                        <h3>{{ table.tableName }}</h3>
+                        <div class="button_align">
+                            <h3>{{ table.tableName }}</h3>
+                            <el-button type="success" color="#529b2e" @click="applyAuth(table)">申请权限</el-button>
+                        </div>
                         <p>{{ table.tableDesc }}</p>
                     </div>
                     <el-table :data="table.columns" max-height="250" style="width: 100%">
@@ -78,8 +93,8 @@
                         <el-table-column prop="isNotNull" label="空类型" width="70" />
                         <el-table-column prop="desc" label="描述" />
                     </el-table>
+                    <div class="dot-line" />
                 </div>
-                <div class="dot-line" />
             </div>
         </div>
     </el-scrollbar>
@@ -87,11 +102,29 @@
 
 <script>
 import { getProjectDetails } from '@/api/projectView'
+import { applyAuth } from '@/api/project';
 import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
             projectDetail: {},
+            isApplying: false,
+            applyOptions: [
+                {
+                    value: '无权限',
+                    label: '无权限'
+                },
+                {
+                    value: '只读',
+                    label: '只读'
+                },
+                {
+                    value: '读写',
+                    label: '读写'
+                }
+            ],
+            authType: '',
+            chosenTable: {},
         }
     },
     methods: {
@@ -141,7 +174,36 @@ export default {
             }
         },
         goBack() {
-            this.$router.push({ name: 'AnalyzerProjectView' })
+            this.$router.push({ name: 'DeveloperProjectView' })
+        },
+        applyAuth(table) {
+            this.isApplying = true;
+            this.chosenTable = table;
+        },
+        cancelApply() {
+            this.isApplying = false;
+            this.chosenTable = {};
+            this.authType = '';
+        },
+        confirmApply() {
+            if (this.authType === '') {
+                ElMessage.error('请选择权限类别')
+                return
+            }
+            const params = {
+                projectname: this.projectDetail.projectname,
+                tableName: this.chosenTable.tableName,
+                authType: this.authType
+            }
+            applyAuth(params).then(() => {
+                ElMessage.success('申请成功')
+                this.isApplying = false;
+                this.chosenTable = {};
+                this.authType = '';
+            }).catch(err => {
+                console.log(err)
+                this.chosenTable = {};
+            })
         }
     },
     beforeMount() {
@@ -151,6 +213,22 @@ export default {
 </script>
 
 <style scoped>
+.apply-choose {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+}
 .pd-header {
     margin: 20px;
     display: flex;
@@ -214,5 +292,11 @@ export default {
     width: 100%;
     margin: 20px auto;
     border-top: 1px dashed gray;
+}
+
+.button_align {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 </style>
