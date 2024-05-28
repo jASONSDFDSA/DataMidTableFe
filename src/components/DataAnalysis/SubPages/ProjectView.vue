@@ -188,9 +188,6 @@ export default {
     font-weight: bold;
 }
 
-.project-body {
-}
-
 .project-button {
     height: 100%;
     display: flex;

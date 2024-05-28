@@ -300,8 +300,6 @@ export default {
     font-weight: bold;
 }
 
-.apiInfo-body {}
-
 .apiInfo-type {
     height: 100%;
     margin-top: 27px;
