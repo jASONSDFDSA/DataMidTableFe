@@ -16,13 +16,6 @@
                     <el-form-item label="密码" prop="password">
                         <el-input type="password" v-model="loginform.password" placeholder="请输入密码" class="input"></el-input>
                     </el-form-item>
-                    <div class="center"> <!-- 选择身份 -->
-                        <el-radio-group v-model="loginform.identity">
-                            <el-radio value="Analyzer"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
-                            <el-radio value="Admin"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
-                            <el-radio value="Developer"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
-                        </el-radio-group>
-                    </div>
                     <div class="center">
                         <el-button type="success" color="#529b2e" @click="login('loginform')">登录</el-button>
                         <el-button type="danger" @click="reset('loginform')">重置</el-button>
@@ -159,9 +152,6 @@ export default {
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
                     { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' }
-                ],
-                identity: [
-                    { required: true, message: '请选择身份', trigger: 'blur' }
                 ]
             },
             registerrules: {
@@ -235,6 +225,7 @@ export default {
                             type: 'success',
                             duration: 5 * 1000
                         });
+                        this.loginform.identity = response.data.identity;
                         storage.set('token', response.data.token);
                         storage.set('user', this.loginform);
 
