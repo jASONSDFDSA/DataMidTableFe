@@ -86,9 +86,9 @@
                     </div>
                     <div class="center">
                         <el-radio-group v-model="registerform.identity">
-                            <el-radio value="Analyzer" @click="reset('registerform')"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
-                            <el-radio value="Admin" @click="reset('registerform')"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
-                            <el-radio value="Developer" @click="reset('registerform')"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
+                            <el-radio value="Analyzer" @click="reset('registerform');isValidating=false;"><el-icon><DataAnalysis /></el-icon>数据分析</el-radio>
+                            <el-radio value="Admin" @click="reset('registerform');isValidating=false;"><el-icon><UserFilled /></el-icon>后台管理</el-radio>
+                            <el-radio value="Developer" @click="reset('registerform');isValidating=false;"><el-icon><ArrowLeft /><ArrowRight /></el-icon>项目开发</el-radio>
                         </el-radio-group>
                     </div>
                     <div class="center">
@@ -210,7 +210,8 @@ export default {
             isRegister: false,
             // isApply: false,
             showLimit: true,
-            isLoading: false
+            isLoading: false,
+            isValidating: false
         };
     },
     methods: {
@@ -257,6 +258,7 @@ export default {
             });
         },
         signup(formName) {
+            this.isValidating = true;
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if(this.registerform.projectname !== '')
@@ -342,6 +344,9 @@ export default {
             }
         },
         getDynamicRegisterRules() {
+            if (!this.isValidating) {
+                return;
+            }
             switch (this.registerform.identity) {
                 case 'Analyzer':
                     return {
