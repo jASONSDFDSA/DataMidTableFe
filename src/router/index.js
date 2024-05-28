@@ -60,6 +60,11 @@ const routes = [
                 name: "DeveloperProjectDetails",
                 path: "projectdetails",
                 component: () => import("../components/ProjectDev/SubPages/ProjectDetails.vue")
+            },
+            {
+                name: "DeveloperApiInfo",
+                path: "apiinfo",
+                component: () => import("../components/ProjectDev/SubPages/ApiInfo.vue")
             }
         ]
     }

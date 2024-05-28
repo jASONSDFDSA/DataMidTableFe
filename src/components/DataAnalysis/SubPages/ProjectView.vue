@@ -19,11 +19,11 @@
         <el-scrollbar height="72vh">
             <div v-for="project in projects" :key="project.id" class="project" @click="watchDetails(project.title)">
                 <el-row>
-                    <el-col :span="2">
+                    <el-col :span="3">
                         <img :src="project.image" alt="project"
-                            style="width: 100px; height: 100px; border-radius: 10px; margin:auto;">
+                            style="width: 125px; height: 125px; border-radius: 10px; margin:auto;">
                     </el-col>
-                    <el-col :span="20">
+                    <el-col :span="19">
                         <div class="project-header">
                             <h1>{{ project.title }}</h1>
                         </div>
@@ -58,7 +58,7 @@ export default {
             projects: [],
             search: '',
             offset: 0,
-            limit: 5,
+            limit: 3,
             isSearching: false,
             pages: 1,
             curpage: 1,
@@ -174,8 +174,9 @@ export default {
 
 .project {
     background-color: white;
-    margin: 20px;
+    margin: 19px;
     padding: 10px;
+    height: fit-content;
 }
 
 .project:hover {
@@ -184,10 +185,10 @@ export default {
 
 .project-header {
     font-size: 22px;
+    font-weight: bold;
 }
 
 .project-body {
-    display: flex;
 }
 
 .project-button {
