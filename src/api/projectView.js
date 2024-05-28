@@ -1,9 +1,13 @@
 import request from '@/utils/request'
 
-export function getProjects() {
+export function getProjects(offset, limit) {
     return request({
         url: '/api/project',
         method: 'get',
+        params: {
+            offset: offset,
+            limit: limit
+        }
     })
 }
 

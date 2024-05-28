@@ -12,7 +12,7 @@
                 <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
                 <el-button @click="refresh()" round>刷新</el-button>
                 <div v-if="isLoading">
-                    <el-icon><Loading /></el-icon>
+                    <el-icon class="is-loading"><Loading /></el-icon>
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@ export default {
         },
         getNewProjects() {
             this.isLoading = true
-            getProjects().then(res => {
+            getProjects(this.offset, this.limit).then(res => {
                 this.projects = res.data.projects
             }).catch(() => {
                 ElMessage.error('获取项目失败')
@@ -110,8 +110,6 @@ export default {
                 console.log(this.pages)
             }).catch(() => {
                 ElMessage.error('获取页数失败')
-            }).finally(() => {
-                this.isLoading = false
             })
         },
         searchProjects() {

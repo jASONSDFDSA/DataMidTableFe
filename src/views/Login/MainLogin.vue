@@ -219,7 +219,11 @@ export default {
             this.isLoading = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    login(this.loginform).then(response => {
+                    const params = {
+                        username: this.loginform.username,
+                        password: this.loginform.password
+                    };
+                    login(params).then(response => {
                         console.log(response);
                         ElMessage({
                             message: '登录成功',

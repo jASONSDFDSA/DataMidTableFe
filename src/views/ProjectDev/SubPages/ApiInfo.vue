@@ -176,6 +176,7 @@ export default {
                 offset: this.offset,
                 limit: this.limit,
                 search: this.search,
+                type: this.type
             }
             searchAPIs(params).then(res => {
                 this.apiInfos = res.data.apiInfos

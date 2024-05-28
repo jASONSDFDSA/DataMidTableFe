@@ -113,7 +113,7 @@ export default {
             } else if (key === '3') {
                 this.$router.push({ name: 'DeveloperApiInfo' });
             } else if (key === '4') {
-                this.$router.push({ name: 'DeveloperProjectInfo' });
+                this.$router.push({ name: 'DeveloperProjectDetails' });
             }
         },
         logout() {
