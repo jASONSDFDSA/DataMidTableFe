@@ -11,10 +11,10 @@
             <div v-if="isLogin">
                 <el-form :model="loginform" :rules="loginrules" ref="loginform" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="用户名" prop="username">
-                        <el-input v-model="loginform.username" placeholder="请输入用户名"></el-input>
+                        <el-input v-model="loginform.username" placeholder="请输入用户名" class="input"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="loginform.password" placeholder="请输入密码"></el-input>
+                        <el-input type="password" v-model="loginform.password" placeholder="请输入密码" class="input"></el-input>
                     </el-form-item>
                     <div class="center"> <!-- 选择身份 -->
                         <el-radio-group v-model="loginform.identity">
@@ -36,59 +36,59 @@
                 <el-form :model="registerform" :rules="getDynamicRegisterRules()" ref="registerform" label-width="100px" class="demo-ruleForm">
                     <div v-if="registerform.identity==='Analyzer'">
                         <el-form-item label="用户名" prop="username">
-                            <el-input v-model="registerform.username" placeholder="请输入用户名"></el-input>
+                            <el-input v-model="registerform.username" placeholder="请输入用户名" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="邮箱" prop="email">
-                            <el-input v-model="registerform.email" placeholder="请输入邮箱"></el-input>
+                            <el-input v-model="registerform.email" placeholder="请输入邮箱" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="电话" prop="phone">
-                            <el-input v-model="registerform.phone" placeholder="请输入电话"></el-input>
+                            <el-input v-model="registerform.phone" placeholder="请输入电话" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="学号" prop="id">
-                            <el-input v-model="registerform.id" placeholder="请输入学号"></el-input>
+                            <el-input v-model="registerform.id" placeholder="请输入学号" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="真实姓名" prop="name">
-                            <el-input v-model="registerform.name" placeholder="请输入真实姓名"></el-input>
+                            <el-input v-model="registerform.name" placeholder="请输入真实姓名" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password1">
-                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="password2">
-                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="邀请码" prop="invitecode">
-                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input><!--<el-button @click="getInviteCode()">获取邀请码</el-button>-->
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码" class="input"></el-input><!--<el-button @click="getInviteCode()">获取邀请码</el-button>-->
                         </el-form-item>
                     </div>
                     <div v-if="registerform.identity==='Admin'">
                         <el-form-item label="用户名" prop="username">
-                            <el-input v-model="registerform.username" placeholder="请输入用户名"></el-input>
+                            <el-input v-model="registerform.username" placeholder="请输入用户名" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password1">
-                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="password2">
-                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="邀请码" prop="invitecode">
-                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input>
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码" class="input"></el-input>
                         </el-form-item>
                     </div>
                     <div v-if="registerform.identity==='Developer'">
                         <el-form-item label="项目名" prop="projectname">
-                            <el-input v-model="registerform.projectname" placeholder="请输入项目名"></el-input>
+                            <el-input v-model="registerform.projectname" placeholder="请输入项目名" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="邮箱" prop="email">
-                            <el-input v-model="registerform.email" placeholder="请输入邮箱"></el-input>
+                            <el-input v-model="registerform.email" placeholder="请输入邮箱" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password1">
-                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password1" placeholder="请输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="password2">
-                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码"></el-input>
+                            <el-input type="password" v-model="registerform.password2" placeholder="请再次输入密码" class="input"></el-input>
                         </el-form-item>
                         <el-form-item label="邀请码" prop="invitecode">
-                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码"></el-input>
+                            <el-input v-model="registerform.invitecode" placeholder="请输入邀请码" class="input"></el-input>
                         </el-form-item>
                     </div>
                     <div class="center">
@@ -390,6 +390,9 @@ export default {
 </script>
 
 <style scoped>
+.input {
+    width: 270px;
+}
 body {
     position: relative;
     height: 100vh;
