@@ -1,32 +1,33 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <el-dialog v-model="isShowed" :show-close="false" :close-on-click-modal="false"
-        :close-on-press-escape="false" destroy-on-close width="640px">
-        <el-form :model="form" label-width="auto" style="width: 600px" :disabled="form.type==='Midtable'">
-            <el-form-item label="API名称">
+    <el-dialog v-model="isShowed" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false"
+        destroy-on-close width="640px">
+        <el-form :model="form" :rules="formRules" ref="form" label-width="auto" style="width: 600px"
+            :disabled="form.type === 'Midtable'">
+            <el-form-item label="API名称" prop="name">
                 <el-input v-model="form.name" style="width:200px" />
             </el-form-item>
-            <el-form-item label="类型" style="width:400px" >
+            <el-form-item label="类型" style="width:400px" prop="type">
                 <el-select v-model="form.type" disabled>
                     <el-option label="由中台向项目用户提供" value="Midtable" />
                     <el-option label="由项目用户向中台提供" value="User" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="URL">
+            <el-form-item label="URL" prop="url">
                 <el-input v-model="form.url" />
             </el-form-item>
-            <el-form-item label="简介">
+            <el-form-item label="简介" prop="desc">
                 <el-input v-model="form.desc" type="textarea" />
             </el-form-item>
-            <el-form-item label="请求格式">
+            <el-form-item label="请求格式" prop="request">
                 <el-input v-model="form.request" type="textarea" />
             </el-form-item>
-            <el-form-item label="响应格式">
+            <el-form-item label="响应格式" prop="response">
                 <el-input v-model="form.response" type="textarea" />
             </el-form-item>
         </el-form>
         <template #footer>
-            <el-button type="primary" @click="onSubmit()" :disabled="form.type==='Midtable'">保存</el-button>
+            <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'Midtable'">保存</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>
@@ -39,15 +40,16 @@
                     </el-icon>
                 </template>
             </el-input>
-            <el-select v-model="type" placeholder="请选择API类型" size="large" style="width:300px">
+            <el-select v-model="type" placeholder="请选择API类型" size="large" style="width:400px">
                 <el-option label="由项目用户向中台提供" value="User"></el-option>
                 <el-option label="由中台向项目用户提供" value="Midtable"></el-option>
             </el-select>
             <div class="search-button">
                 <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
                 <el-button @click="refresh()" round>刷新</el-button>
+                <el-button type="primary" @click="addAPI()" round>新建API</el-button>
                 <div v-if="isLoading">
-                    <el-icon>
+                    <el-icon class="is-loading">
                         <Loading />
                     </el-icon>
                 </div>
@@ -113,8 +115,26 @@ export default {
                 request: '',
                 response: ''
             },
+            formRules: {
+                name: [
+                    { required: true, message: '请输入API名称', trigger: 'blur' }
+                ],
+                url: [
+                    { required: true, message: '请输入API URL', trigger: 'blur' },
+                    { pattern: /^http(s)?:\/\/.*/, message: '请输入正确的URL', trigger: 'blur' }
+                ],
+                desc: [
+                    { required: true, message: '请输入API简介', trigger: 'blur' }
+                ],
+                request: [
+                    { required: true, message: '请输入请求格式', trigger: 'blur' }
+                ],
+                response: [
+                    { required: true, message: '请输入响应格式', trigger: 'blur' }
+                ]
+            },
             isShowed: false,
-            isUser: false
+            isUser: false,
         }
     },
     methods: {
@@ -199,8 +219,8 @@ export default {
         },
         handleType() {
             console.log(this.apiInfos)
-            for(let i = 0; i < this.apiInfos.length; i++) {
-                if(this.apiInfos[i].type == 'User') {
+            for (let i = 0; i < this.apiInfos.length; i++) {
+                if (this.apiInfos[i].type == 'User') {
                     this.apiInfos[i].type = '由项目用户向中台提供'
                 } else if (this.apiInfos[i].type == 'Midtable') {
                     this.apiInfos[i].type = '由中台向项目用户提供'
@@ -217,19 +237,38 @@ export default {
                 ElMessage.error('获取API详情失败')
             })
         },
+        addAPI() {
+            this.isShowed = true
+            this.form.type = 'User'
+            this.isUser = true
+            this.form.id = -1
+        },
         onSubmit() {
-            saveAPI(this.form).then(() => {
-                this.$message({
-                    message: '创建成功',
-                    type: 'success'
-                })
-            }).catch(() => {
-                ElMessage.error('创建失败')
-            }).finally(() => {
-                this.isShowed = false
-                this.form = {}
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    saveAPI(this.form).then(() => {
+                        this.getAllPages()
+                        this.getNewAPIs()
+                        if (this.form.id == -1) {
+                            this.$message({
+                                message: '创建成功',
+                                type: 'success'
+                            })
+                        } else {
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            })
+                        }
+                    }).catch(() => {
+                        ElMessage.error('创建失败')
+                    }).finally(() => {
+                        this.isShowed = false
+                        this.form = {}
+                        this.isCreated = false
+                    })
+                }
             })
-
         },
         cancel() {
             this.isShowed = false
@@ -245,7 +284,6 @@ export default {
 </script>
 
 <style scoped>
-
 .box-button {
     display: flex;
     justify-content: center;
@@ -264,7 +302,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    width: fit-content;
     margin: auto;
 }
 

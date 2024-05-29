@@ -2,7 +2,7 @@
     <body>
         <div class="form-box">
             <div class="Logo">
-                <img src="https://www.sysu.edu.cn/images/logo1.png" alt="SYSU" style="width:100%;height:100%;">
+                <img src="https://sse.sysu.edu.cn/sites/sse.prod.dpcms4.sysu.edu.cn/files/inline-images/%E5%AD%A6%E9%99%A2%E5%90%8D%E7%A7%B02_0.png" alt="SYSU" style="width:354px;height:54px;">
             </div>
             <el-tabs class="tabs-title" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="登录" name="first"><h1 class="login-title">登录</h1></el-tab-pane>
@@ -14,7 +14,7 @@
                         <el-input v-model="loginform.username" placeholder="请输入用户名" class="input"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="loginform.password" placeholder="请输入密码" class="input"></el-input>
+                        <el-input type="password" show-password v-model="loginform.password" placeholder="请输入密码" class="input"></el-input>
                     </el-form-item>
                     <div class="center">
                         <el-button type="success" color="#529b2e" @click="login('loginform')">登录</el-button>
@@ -403,8 +403,12 @@ body {
 }
 
 .Logo {
-    margin: 10px auto;
-    width: 200px;
+    display: flex;
+    margin: 0 auto;
+    border-radius: 10px 10px 0 0;
+    justify-content: center;
+    width: 100%;
+    background-color: #005826;
 }
 
 .tabs-title {
@@ -413,13 +417,13 @@ body {
 }
 
 .form-box {
-    border-radius: 20px;
     position: absolute;
+    border-radius: 10px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: white;
     margin: 0 auto;
-    background-color: #ffffff;
     vertical-align: middle;
 }
 

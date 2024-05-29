@@ -39,11 +39,11 @@
     </el-dialog>
     <el-dialog title="项目简介" v-model="introVisible" :show-close="false" :close-on-click-modal="false"
         :close-on-press-escape="false" destroy-on-close width="fit-content">
-        <el-form :model="form" label-width="auto" style="width: 600px">
-            <el-form-item label="项目名称">
+        <el-form :model="form" :rules="formrules" ref="form" label-width="auto" style="width: 600px">
+            <el-form-item label="项目名称" prop="projectname">
                 <el-input v-model="form.projectname" placeholder="请输入项目名称"></el-input>
             </el-form-item>
-            <el-form-item label="项目简介">
+            <el-form-item label="项目简介" prop="description">
                 <el-input type="textarea" v-model="form.description" rows="5" placeholder="请输入项目简介"></el-input>
             </el-form-item>
         </el-form>
@@ -58,33 +58,39 @@
     </el-dialog>
     <el-dialog title="项目成员" v-model="memberVisible" :show-close="false" :close-on-click-modal="false"
         :close-on-press-escape="false" destroy-on-close width="fit-content">
-        <el-form :model="member_form" :rules="member_rules" label-width="auto" style="width: 600px">
+        <el-form :model="member_form" :rules="member_rules" ref="member_form" label-width="auto" style="width: 600px">
             <el-form-item label="姓名" prop="name">
-                <el-input v-model="member_form.name" placeholder="请输入姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="电话" prop="phone">
-                <el-input v-model="member_form.phone" placeholder="请输入电话" :icon="iphone">
+                <el-input v-model="member_form.name" placeholder="请输入姓名">
                     <template #prefix>
                         <el-icon>
-                            <Iphone />
+                            <user />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="phone">
+                <el-input v-model="member_form.phone" placeholder="请输入电话">
+                    <template #prefix>
+                        <el-icon>
+                            <iphone />
                         </el-icon>
                     </template>
                 </el-input>
             </el-form-item>
             <el-form-item label="邮箱" prop="email">
-                <el-input v-model="member_form.email" placeholder="请输入电子邮箱" :icon="Message">
+                <el-input v-model="member_form.email" placeholder="请输入电子邮箱">
                     <template #prefix>
                         <el-icon>
-                            <Message />
+                            <message />
                         </el-icon>
                     </template>
                 </el-input>
             </el-form-item>
             <el-form-item label="职务" prop="job">
-                <el-input v-model="member_form.job" placeholder="请输入职务" :icon="tickets">
+                <el-input v-model="member_form.job" placeholder="请输入职务">
                     <template #prefix>
                         <el-icon>
-                            <Tickets />
+                            <tickets />
                         </el-icon>
                     </template>
                 </el-input>
@@ -95,6 +101,85 @@
                 <div>
                     <el-button @click="cancelMember">取 消</el-button>
                     <el-button type="primary" @click="submitMember" color="#529b2e">确 定</el-button>
+                </div>
+            </span>
+        </template>
+    </el-dialog>
+    <el-dialog title="同步配置" v-model="syncVisible" :show-close="false" :close-on-click-modal="false"
+        :close-on-press-escape="false" destroy-on-close width="fit-content">
+        <el-form :model="syncForm" :rules="syncRules" ref="syncForm" label-width="auto" style="width: 600px">
+            <el-form-item label="数据源库名" prop="database">
+                <el-input v-model="syncForm.database" placeholder="请输入数据源库名">
+                    <template #prefix>
+                        <el-icon>
+                            <coin />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="数据源表名" prop="table">
+                <el-input v-model="syncForm.table" placeholder="请输入数据源表名">
+                    <template #prefix>
+                        <el-icon>
+                            <folder />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="数据源主机地址" prop="host">
+                <el-input v-model="syncForm.host" placeholder="请输入数据源主机地址">
+                    <template #prefix>
+                        <el-icon>
+                            <monitor />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="数据源端口" prop="port">
+                <el-input v-model="syncForm.port" placeholder="请输入数据源端口">
+                    <template #prefix>
+                        <el-icon>
+                            <location />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="数据源用户名" prop="username">
+                <el-input v-model="syncForm.username" placeholder="请输入数据源用户名">
+                    <template #prefix>
+                        <el-icon>
+                            <user />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="数据源密码" prop="password">
+                <el-input v-model="syncForm.password" placeholder="请输入数据源密码" type="password" show-password>
+                    <template #prefix>
+                        <el-icon>
+                            <key />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="中台表名" prop="midTable">
+                <el-input v-model="syncForm.midTable" placeholder="请输入中台表名">
+                    <template #prefix>
+                        <el-icon>
+                            <folder />
+                        </el-icon>
+                    </template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="简介" prop="desc">
+                <el-input type="textarea" v-model="syncForm.desc" rows="5" placeholder="请输入简介"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span>
+                <div>
+                    <el-button @click="cancelSync">取 消</el-button>
+                    <el-button type="primary" @click="submitSync" color="#529b2e">确 定</el-button>
                 </div>
             </span>
         </template>
@@ -134,7 +219,7 @@
                     </el-icon>
                 </div>
                 <el-descriptions v-for="member in projectDetail.members" :key="member.id" class="margin-top"
-                    :title="member.name" :column="4" size="default" border>
+                    :title="member.name" :column="5" size="default" border>
                     <el-descriptions-item width="fit-content" align="center">
                         <template #label>
                             <div class="cell-item">
@@ -155,7 +240,7 @@
                                 电子邮箱
                             </div>
                         </template>
-                        <div style="width:175px">
+                        <div style="width:150px">
                             {{ member.email }}
                         </div>
                     </el-descriptions-item>
@@ -181,23 +266,54 @@
                                 编辑
                             </div>
                         </template>
-                        <el-icon @click="editMember(member)" class="edit-icon">
+                        <el-icon @click="editMember(member)" style="
+                            cursor: pointer;
+                            font-size: 20px;
+                            color: #409eff;">
                             <Edit />
+                        </el-icon>
+                    </el-descriptions-item>
+                    <el-descriptions-item width="fit-content">
+                        <template #label>
+                            <div class="cell-item">
+                                <el-icon>
+                                    <Delete />
+                                </el-icon>
+                                删除
+                            </div>
+                        </template>
+                        <el-icon @click="deleteMember(member)" style="
+                            cursor: pointer;
+                            font-size: 20px;
+                            color: red;">
+                            <Delete />
                         </el-icon>
                     </el-descriptions-item>
                 </el-descriptions>
             </div>
             <div class="line" />
             <div class="pd-data">
-                <h2 style="display: flex; align-items: center; margin-top: 20px;"><el-icon>
-                        <Coin />
-                    </el-icon>数据</h2>
-
+                <div class="hori">
+                    <h2 style="display: flex; align-items: center;"><el-icon>
+                            <Coin />
+                        </el-icon>数据</h2>
+                    <el-icon @click="syncVisible = true" class="edit-icon">
+                        <Plus />
+                    </el-icon>
+                </div>
                 <div v-for="table in projectDetail.tables" :key="table.id">
                     <div class="pd-table">
                         <div class="button_align">
-                            <h3>{{ table.tableName }}</h3>
-                            <el-button type="success" color="#529b2e" @click="applyAuth(table)">申请权限</el-button>
+                            <div style="display: flex; justify-content: left; align-items: center;">
+                                <h3>{{ table.tableName }}</h3>
+                                <el-button type="success" color="#529b2e" @click="syncConfig(table)" style="margin-left: 20px">同步配置</el-button>
+                            </div>
+                            <el-icon @click="deleteTable(table)" style="
+                                cursor: pointer;
+                                font-size: 20px;
+                                color: red;">
+                                <Delete />
+                            </el-icon>
                         </div>
                         <p>{{ table.tableDesc }}</p>
                     </div>
@@ -217,10 +333,10 @@
 </template>
 
 <script>
-import { getMyProject, submitMember } from '@/api/project';
-import { applyAuth, importNewImg, submitIntro } from '@/api/project';
+import { getMyProject, submitMember, deleteMember } from '@/api/project';
+import { importNewImg, submitIntro, submitSync, deleteTable } from '@/api/project';
 import storage from '@/store/storage';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { reactive, ref } from 'vue'
 import VueCropper from 'vue-cropper/lib/vue-cropper.vue';
 
@@ -233,6 +349,7 @@ export default {
             dialogVisible: ref(false),
             introVisible: ref(false),
             memberVisible: ref(false),
+            syncVisible: ref(false),
             cropper: ref(null),
             uploadBtn: ref(null),
             elUpload: ref(null),
@@ -254,25 +371,14 @@ export default {
             size: ref(150),
             projectDetail: {},
             isApplying: false,
-            applyOptions: [
-                {
-                    value: '无权限',
-                    label: '无权限'
-                },
-                {
-                    value: '只读',
-                    label: '只读'
-                },
-                {
-                    value: '读写',
-                    label: '读写'
-                }
-            ],
-            authType: '',
-            chosenTable: {},
             form: {
                 projectname: '',
                 description: ''
+            },
+            formrules: {
+                projectname: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
+                ]
             },
             member_form: {
                 name: '',
@@ -296,7 +402,44 @@ export default {
                     { required: true, message: '请输入职务', trigger: 'blur' }
                 ]
             },
-            isMember: false
+            isMember: false,
+            syncForm: {
+                database: '',
+                table: '',
+                host: '',
+                port: '',
+                username: '',
+                password: '',
+                midTable: '',
+                desc: ''
+            },
+            syncRules: {
+                database: [
+                    { required: true, message: '请输入数据源库名', trigger: 'blur' }
+                ],
+                table: [
+                    { required: true, message: '请输入数据源表名', trigger: 'blur' }
+                ],
+                host: [
+                    { required: true, message: '请输入数据源主机地址', trigger: 'blur' }
+                ],
+                port: [
+                    { required: true, message: '请输入数据源端口', trigger: 'blur' }
+                ],
+                username: [
+                    { required: true, message: '请输入数据源用户名', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入数据源密码', trigger: 'blur' }
+                ],
+                midTable: [
+                    { required: true, message: '请输入中台表名', trigger: 'blur' }
+                ],
+                desc: [
+                    { required: true, message: '请输入简介', trigger: 'blur' }
+                ]
+            },
+            isTable: false
         }
     },
     methods: {
@@ -350,35 +493,6 @@ export default {
         goBack() {
             this.$router.push({ name: 'DeveloperProjectView' })
         },
-        applyAuth(table) {
-            this.isApplying = true;
-            this.chosenTable = table;
-        },
-        cancelApply() {
-            this.isApplying = false;
-            this.chosenTable = {};
-            this.authType = '';
-        },
-        confirmApply() {
-            if (this.authType === '') {
-                ElMessage.error('请选择权限类别')
-                return
-            }
-            const params = {
-                projectname: this.projectDetail.projectname,
-                tableName: this.chosenTable.tableName,
-                authType: this.authType
-            }
-            applyAuth(params).then(() => {
-                ElMessage.success('申请成功')
-                this.isApplying = false;
-                this.chosenTable = {};
-                this.authType = '';
-            }).catch(err => {
-                console.log(err)
-                this.chosenTable = {};
-            })
-        },
         getCrop() {
             // console.log(this.$refs.cropper)
             if (this.options.img === '') {
@@ -429,15 +543,19 @@ export default {
         },
 
         submitIntro() {
-            submitIntro(this.form).then(() => {
-                this.getProjectDetails()
-                let user = storage.get('user')
-                user.username = this.form.projectname
-                storage.set('user', user)
-                this.introVisible = false
-                ElMessage.success('修改成功')
-            }).catch(() => {
-                ElMessage.error('修改失败')
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    submitIntro(this.form).then(() => {
+                        this.getProjectDetails()
+                        let user = storage.get('user')
+                        user.username = this.form.projectname
+                        storage.set('user', user)
+                        this.introVisible = false
+                        ElMessage.success('修改成功')
+                    }).catch(() => {
+                        ElMessage.error('修改失败')
+                    })
+                }
             })
         },
         cancelIntro() {
@@ -485,6 +603,87 @@ export default {
             this.member_form.job = member.job
             this.memberVisible = true
             this.isMember = true
+        },
+        deleteMember(member) {
+            ElMessageBox.confirm('确认删除成员' + member.name + '?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deleteMember(member).then(() => {
+                    this.getProjectDetails()
+                    ElMessage.success('删除成功')
+                }).catch(() => {
+                    ElMessage.error('删除失败')
+                })
+            })
+        },
+        syncConfig() {
+            this.syncVisible = true
+            this.isTable = true
+        },
+        submitSync() {
+            this.$refs['syncForm'].validate((valid) => {
+                if (valid) {
+                    const params = {
+                        database: this.syncForm.database,
+                        table: this.syncForm.table,
+                        host: this.syncForm.host,
+                        port: this.syncForm.port,
+                        username: this.syncForm.username,
+                        password: this.syncForm.password,
+                        midTable: this.syncForm.midTable,
+                        desc: this.syncForm.desc,
+                        isTable: this.isTable
+                    }
+                    submitSync(params).then(() => {
+                        this.getProjectDetails()
+                        ElMessage.success('同步成功')
+                        this.syncVisible = false
+                        this.syncForm.database = ''
+                        this.syncForm.table = ''
+                        this.syncForm.host = ''
+                        this.syncForm.port = ''
+                        this.syncForm.username = ''
+                        this.syncForm.password = ''
+                        this.syncForm.midTable = ''
+                        this.syncForm.desc = ''
+                        this.isTable = false
+                    }).catch(() => {
+                        ElMessage.error('同步失败')
+                    })
+                }
+            })
+        },
+        cancelSync() {
+            this.syncVisible = false
+            this.syncForm.database = ''
+            this.syncForm.table = ''
+            this.syncForm.host = ''
+            this.syncForm.port = ''
+            this.syncForm.username = ''
+            this.syncForm.password = ''
+            this.syncForm.midTable = ''
+            this.syncForm.desc = ''
+            this.isTable = false
+        },
+        deleteTable(table) {
+            ElMessageBox.confirm('确认删除表' + table.tableName + '?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const params = {
+                    projectname: this.projectDetail.projectname,
+                    tablename: table.tableName
+                }
+                deleteTable(params).then(() => {
+                    this.getProjectDetails()
+                    ElMessage.success('删除成功')
+                }).catch(() => {
+                    ElMessage.error('删除失败')
+                })
+            })
         }
     },
     beforeMount() {
@@ -561,7 +760,7 @@ export default {
 }
 
 .pd-intro {
-    width: 80%;
+    width: 85%;
     font-size: 20px;
 }
 

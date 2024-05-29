@@ -4,8 +4,8 @@
             <el-header class="header">
                 <title>Analyzer</title>
                 <div class="header-name">
-                    <img src="https://www.sysu.edu.cn/images/zhuzhanLOGO.png" alt="logo"
-                        style="width: 125px; height: 36px;">
+                    <img src="https://sse.sysu.edu.cn/sites/sse.prod.dpcms4.sysu.edu.cn/files/inline-images/%E5%AD%A6%E9%99%A2%E5%90%8D%E7%A7%B02_0.png" alt="logo"
+                        style="width: 236px; height: 36px; cursor: pointer;" @click="jumptoOff">
                     &nbsp;&nbsp;&nbsp;
                     <h1><el-icon>
                             <ArrowLeft />
@@ -104,6 +104,9 @@ export default {
         }
     },
     methods: {
+        jumptoOff() {
+            window.open('https://sse.sysu.edu.cn/', '_blank')
+        },
         // eslint-disable-next-line no-unused-vars
         handleSelect(key, keyPath) {
             // console.log(key, keyPath)
@@ -119,9 +122,14 @@ export default {
             }
         },
         logout() {
-            ElMessage.success('退出成功')
-            storage.clear()
-            this.$router.push('/')
+            ElMessageBox.confirm('确认退出？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                storage.clear()
+                this.$router.push('/')
+            })
         },
         showChangePwd() {
             this.showPwdBox = true
