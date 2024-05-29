@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="apiInfo-box" v-if="isShowed">
+    <el-dialog v-model="isShowed" :show-close="false" :close-on-click-modal="false"
+        :close-on-press-escape="false" destroy-on-close width="640px">
         <el-form :model="form" label-width="auto" style="width: 600px" :disabled="form.type==='Midtable'">
             <el-form-item label="API名称">
                 <el-input v-model="form.name" style="width:200px" />
@@ -24,11 +25,11 @@
                 <el-input v-model="form.response" type="textarea" />
             </el-form-item>
         </el-form>
-        <div class="box-button">
+        <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type==='Midtable'">保存</el-button>
             <el-button @click="cancel()">取消</el-button>
-        </div>
-    </div>
+        </template>
+    </el-dialog>
     <div class="body">
         <div class="search">
             <el-input v-model="search" placeholder="请输入API名称" size="large">
@@ -244,17 +245,6 @@ export default {
 </script>
 
 <style scoped>
-.apiInfo-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    z-index: 100;
-}
 
 .box-button {
     display: flex;

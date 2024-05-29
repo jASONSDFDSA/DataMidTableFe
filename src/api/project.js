@@ -15,6 +15,22 @@ export function getMyProject() {
     })
 }
 
+export function submitIntro(data) {
+    return request({
+        url: '/api/developer/project/intro',
+        method: 'post',
+        data
+    })
+}
+
+export function submitMember(data) {
+    return request({
+        url: '/api/developer/project/member',
+        method: 'post',
+        data
+    })
+}
+
 export function importNewImg(data) {
     return request({
         url: '/api/developer/project/img',

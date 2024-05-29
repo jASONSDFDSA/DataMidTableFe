@@ -43,7 +43,8 @@
 
                 <el-main>
                     <router-view></router-view>
-                    <div v-if="showPwdBox" class="pwdBox">
+                    <el-dialog v-model="showPwdBox" :show-close="false" :close-on-click-modal="false"
+                        :close-on-press-escape="false" destroy-on-close width="600px">
                         <el-form :model="changePwdForm" :rules="changePwdRules" ref="changePwdForm" label-width="80px">
                             <el-form-item label="原密码" prop="oldPwd">
                                 <el-input v-model="changePwdForm.oldPwd" type="password"></el-input>
@@ -54,12 +55,12 @@
                             <el-form-item label="确认密码" prop="confirmPwd">
                                 <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
                             </el-form-item>
-                            <div class="center">
-                                <el-button color="#529b2e" @click="changePassword()">修改密码</el-button>
-                                <el-button type="danger" @click="clearPwdBox()">取消</el-button>
-                            </div>
                         </el-form>
-                    </div>
+                        <template #footer>
+                            <el-button color="#529b2e" @click="changePassword()">修改密码</el-button>
+                            <el-button type="danger" @click="clearPwdBox()">取消</el-button>
+                        </template>
+                    </el-dialog>
                 </el-main>
             </el-container>
 

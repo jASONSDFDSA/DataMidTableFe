@@ -1,53 +1,22 @@
 <template>
-    <el-dialog title="上传头像" v-model="dialogVisible" :show-close="false" :close-on-click-modal="false"
-        :close-on-press-escape="false" destroy-on-close width="600px">
-        <div class="avatar-container">
-            <!-- {{dialogVisible}} -->
-            <!-- 待上传图片 -->
-            <div v-show="!options.img">
-                <el-upload class="upload" ref="elUpload" action="#" :on-change="upload"
-                    accept="image/png, image/jpeg, image/jpg" :show-file-list="false" :auto-upload="false">
-                    <template v-slot:trigger>
-                        <el-button type="primary" ref="uploadBtn" color="#529b2e">
-                            选择图片
-                        </el-button>
-                    </template>
-                </el-upload>
-                <div>支持jpg、png格式的图片，大小不超过5M</div>
+    <el-dialog title="申请权限" v-model="isApplying" width="30%">
+        <el-form :model="authType" :rules="authTypeRules" label-width="80px">
+            <el-form-item label="权限类别" prop="authType">
+                <el-select v-model="authType" placeholder="请选择权限类别">
+                    <el-option v-for="item in applyOptions" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+            </el-form-item>
+            <div class="center">
+                <el-button type="success" @click="confirmApply()">确认</el-button>
+                <el-button type="danger" @click="cancelApply()">取消</el-button>
             </div>
-            <!-- <img :src="options.img" alt=""> -->
-            <!-- 已上传图片 -->
-            <div v-show="options.img" class="avatar-crop">
-                <VueCropper class="crop-box" ref="cropper" :img="options.img" :autoCrop="options.autoCrop"
-                    :fixedBox="options.fixedBox" :canMoveBox="options.canMoveBox" :autoCropWidth="options.autoCropWidth"
-                    :autoCropHeight="options.autoCropHeight" :centerBox="options.centerBox" :fixed="options.fixed"
-                    :fixedNumber="options.fixedNumber" :canMove="options.canMove" :canScale="options.canScale">
-                </VueCropper>
-            </div>
-        </div>
-        <template #footer>
-            <span class="dialog-footer">
-                <div class="reupload" @click="reupload">
-                    <span v-show="options.img">重新上传</span>
-                </div>
-                <div>
-                    <el-button @click="closeDialog">取 消</el-button>
-                    <el-button type="primary" @click="getCrop" color="#529b2e">确 定</el-button>
-                </div>
-            </span>
-        </template>
+        </el-form>
     </el-dialog>
     <el-scrollbar height="80vh">
         <!-- Project Logo and Name -->
         <div class="pd-header">
-            <div>
-                <img :src="projectDetail.logo" alt="logo"
-                    style="width: 150px; height: 150px; border-radius: 4px; margin:auto;" />
-                <el-icon @click="dialogVisible = true" style="cursor: pointer; font-size: 20px; margin-left: 10px;">
-                    <Edit />
-                </el-icon>
-            </div>
-
+            <img :src="projectDetail.logo" alt="logo"
+                style="width: 150px; height: 150px; border-radius: 10px; margin:auto;" />
             <div class="pd-intro">
                 <div class="pd-name">
                     <h1>{{ projectDetail.projectname }}</h1>
@@ -125,8 +94,8 @@
                         <el-table-column prop="isNotNull" label="空类型" width="70" />
                         <el-table-column prop="desc" label="描述" />
                     </el-table>
-                    <div class="dot-line" />
                 </div>
+                <div class="dot-line" />
             </div>
         </div>
     </el-scrollbar>
@@ -134,37 +103,11 @@
 
 <script>
 import { getProjectDetails } from '@/api/projectView'
-import { applyAuth, importNewImg } from '@/api/project';
+import { applyAuth } from '@/api/project';
 import { ElMessage } from 'element-plus';
-import { reactive, ref } from 'vue'
-import VueCropper from 'vue-cropper/lib/vue-cropper.vue';
-
 export default {
-    components: {
-        VueCropper
-    },
     data() {
         return {
-            dialogVisible: ref(false),
-            cropper: ref(null),
-            uploadBtn: ref(null),
-            elUpload: ref(null),
-            image: ref(''),
-            showButton: ref(false),
-            options: reactive({
-                img: '', // 原图文件
-                autoCrop: true, // 默认生成截图框
-                fixedBox: false, // 固定截图框大小
-                canMoveBox: true, // 截图框可以拖动
-                autoCropWidth: 200, // 截图框宽度
-                autoCropHeight: 200, // 截图框高度
-                fixed: true, // 截图框宽高固定比例
-                fixedNumber: [1, 1], // 截图框的宽高比例
-                centerBox: true, // 截图框被限制在图片里面
-                canMove: false, // 上传图片不允许拖动
-                canScale: false // 上传图片不允许滚轮缩放
-            }),
-            size: ref(150),
             projectDetail: {},
             isApplying: false,
             applyOptions: [
@@ -182,6 +125,11 @@ export default {
                 }
             ],
             authType: '',
+            authTypeRules: {
+                authType: [
+                    { required: true, message: '请选择权限类别', trigger: 'blur' }
+                ]
+            },
             chosenTable: {},
         }
     },
@@ -232,7 +180,7 @@ export default {
             }
         },
         goBack() {
-            this.$router.push({ name: 'DeveloperProjectView' })
+            this.$router.push({ name: 'AnalyzerProjectView' })
         },
         applyAuth(table) {
             this.isApplying = true;
@@ -263,57 +211,6 @@ export default {
                 this.chosenTable = {};
             })
         },
-        getCrop() {
-            // console.log(this.$refs.cropper)
-            if (this.options.img === '') {
-                ElMessage.error('请先选择图片')
-                return
-            }
-            this.$refs.cropper.getCropBlob(data => {
-                let formData = new FormData();
-                formData.append("file", data);
-                //上传接口
-                importNewImg(formData).then((response) => {
-                    this.projectDetail.logo = response.data.img;
-                    ElMessage.success('上传成功');
-                }).catch(() => {
-                })
-
-                this.closeDialog();
-            });
-        },
-        // eslint-disable-next-line no-unused-vars
-        upload(file, uploadFiles) {
-            const isIMAGE = file.raw.type === 'image/jpeg' || file.raw.type === 'image/png';
-            const isLt5M = file.raw.size / 1024 / 1024 < 5; 
-            if (!isIMAGE) {
-                ElMessage.warning("请选择 jpg、png 格式的图片");
-                return false;
-            }
-            if (!isLt5M) {
-                ElMessage.warning("图片大小不能超过 5MB");
-                return false;
-            }
-            let reader = new FileReader();
-            reader.readAsDataURL(file.raw);
-            reader.onload = e => {
-                this.options.img = e.target.result; // base64
-            };
-            this.$refs.elUpload.clearFiles(); //这里处理重新上传时，upload组件change事件错误问题
-        },
-
-        reupload() {
-            this.$refs.uploadBtn.$el.click();
-        },
-
-        closeDialog() {
-            this.dialogVisible = false;
-            this.options.img = '';
-        },
-        showImageCropper() {
-            this.dialogVisible = true
-        }
-
     },
     beforeMount() {
         this.getProjectDetails()
@@ -321,71 +218,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.dialog-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-
-    .reupload {
-        color: #409eff;
-        cursor: pointer;
-    }
-}
-
-.avatar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 560px;
-    height: 350px;
-    background-color: #f0f2f5;
-    margin-right: 10px;
-    border-radius: 4px;
-
-    .upload {
-        text-align: center;
-        margin-bottom: 24px;
-    }
-
-    .avatar-crop {
-        width: 560px;
-        height: 350px;
-        position: relative;
-
-        .crop-box {
-            width: 100%;
-            height: 100%;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-    }
-}
-</style>
-
 <style scoped>
-.apply-choose {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: fit-content;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    z-index: 1000;
-}
-
 .pd-header {
     margin: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .pd-intro {

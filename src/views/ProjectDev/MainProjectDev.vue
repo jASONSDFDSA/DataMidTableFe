@@ -4,7 +4,8 @@
             <el-header class="header">
                 <title>Analyzer</title>
                 <div class="header-name">
-                    <img src="https://www.sysu.edu.cn/images/zhuzhanLOGO.png" alt="logo" style="width: 125px; height: 36px;">
+                    <img src="https://www.sysu.edu.cn/images/zhuzhanLOGO.png" alt="logo"
+                        style="width: 125px; height: 36px;">
                     &nbsp;&nbsp;&nbsp;
                     <h1><el-icon>
                             <ArrowLeft />
@@ -19,8 +20,8 @@
             </el-header>
             <el-container>
                 <el-aside width="200px" class="aside">
-                    <el-menu active-text-color="#005826" background-color="white" class="aside-menu"
-                        default-active="1" text-color="#000" @select="handleSelect">
+                    <el-menu active-text-color="#005826" background-color="white" class="aside-menu" default-active="1"
+                        text-color="#000" @select="handleSelect">
                         <el-menu-item index="1" class="menu-item"><el-icon>
                                 <Message />
                             </el-icon>通知</el-menu-item>
@@ -38,7 +39,8 @@
 
                 <el-main>
                     <router-view></router-view>
-                    <div v-if="showPwdBox" class="pwdBox">
+                    <el-dialog v-model="showPwdBox" :show-close="false" :close-on-click-modal="false"
+                        :close-on-press-escape="false" destroy-on-close width="600px">
                         <el-form :model="changePwdForm" :rules="changePwdRules" ref="changePwdForm" label-width="80px">
                             <el-form-item label="原密码" prop="oldPwd">
                                 <el-input v-model="changePwdForm.oldPwd" type="password"></el-input>
@@ -49,12 +51,12 @@
                             <el-form-item label="确认密码" prop="confirmPwd">
                                 <el-input v-model="changePwdForm.confirmPwd" type="password"></el-input>
                             </el-form-item>
-                            <div class="center">
-                                <el-button color="#529b2e" @click="changePassword()">修改密码</el-button>
-                                <el-button type="danger" @click="clearPwdBox()">取消</el-button>
-                            </div>
                         </el-form>
-                    </div>
+                        <template #footer>
+                            <el-button color="#529b2e" @click="changePassword()">修改密码</el-button>
+                            <el-button type="danger" @click="clearPwdBox()">取消</el-button>
+                        </template>
+                    </el-dialog>
                 </el-main>
             </el-container>
 
@@ -113,7 +115,7 @@ export default {
             } else if (key === '3') {
                 this.$router.push({ name: 'DeveloperApiInfo' });
             } else if (key === '4') {
-                this.$router.push({ name: 'DeveloperProjectDetails' });
+                this.$router.push({ name: 'DeveloperMyProject' });
             }
         },
         logout() {
