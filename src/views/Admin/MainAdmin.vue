@@ -20,7 +20,7 @@
             <el-container>
                 <el-aside width="200px" class="aside">
                     <el-menu active-text-color="#005826" background-color="white" class="aside-menu"
-                        default-active="1" text-color="#000" @open="handleOpen" @close="handleClose">
+                        default-active="1" text-color="#000" @select="handleSelect">
                         <el-menu-item index="1" class="menu-item"><el-icon>
                                 <Message />
                             </el-icon>通知</el-menu-item>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { getAllUsers } from '@/api/admin'
 import { changePassword } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import storage from '@/store/storage'
@@ -112,11 +113,29 @@ export default {
         jumptoOff() {
             window.open('https://sse.sysu.edu.cn/', '_blank')
         },
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath)
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath)
+        // eslint-disable-next-line no-unused-vars
+        handleSelect(key, keyPath) {
+            this.activeIndex = key
+            switch (key) {
+                case '1':
+                    this.$router.push({name: 'AdminMessage'})
+                    break
+                case '2':
+                    this.$router.push({name: 'AdminUserManagement'})
+                    break
+                case '3':
+                    this.$router.push({name: 'AdminMonitor'})
+                    break
+                case '4':
+                    this.$router.push({ name: 'AdminSQL' })
+                    break
+                case '5':
+                    this.$router.push({ name: 'AdminPublicData' })
+                    break
+                case '6':
+                    this.$router.push({ name: 'AdminApiInfo' })
+                    break
+            }
         },
         logout() {
             ElMessageBox.confirm('确认退出？', '提示', {
@@ -167,6 +186,14 @@ export default {
                 }
             })
         }
+    },
+    beforeMount() {
+        getAllUsers().then(res => {
+            storage.set('users', res.data.users)
+            ElMessage.success('获取用户信息成功')
+        }).catch(() => {
+            ElMessage.error('获取所有用户信息失败，请刷新页面重试')
+        })
     }
 }
 </script>

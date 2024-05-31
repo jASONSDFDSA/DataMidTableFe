@@ -38,7 +38,35 @@ const routes = [
     {
         name: "Admin",
         path: "/admin/:username",
-        component: () => import("../views/Admin/MainAdmin.vue")
+        component: () => import("../views/Admin/MainAdmin.vue"),
+        children: [
+            {
+                name: "AdminMessage",
+                path: "message",
+                alias: "",
+                component: () => import("../views/Admin/SubPages/Message.vue")
+            },
+            {
+                name: "AdminProjectDetails",
+                path: "projectdetails/:projectname",
+                component: () => import("../views/Admin/SubPages/ProjectDetails.vue")
+            },
+            {
+                name: "AdminUserManagement",
+                path: "usermanagement",
+                component: () => import("../views/Admin/SubPages/UserManagement.vue")
+            },
+            {
+                name: "AdminApiInfo",
+                path: "apiinfo",
+                component: () => import("../views/Admin/SubPages/ApiInfo.vue")
+            },
+            {
+                name: "AdminPublicData",
+                path: "publicdata",
+                component: () => import("../views/Admin/SubPages/MyProjectDetails.vue")
+            }
+        ]
     },
     {
         name: "Developer",

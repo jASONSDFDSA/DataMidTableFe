@@ -8,13 +8,6 @@ export function applyAuth(data) {
     })
 }
 
-export function getMyProject() {
-    return request({
-        url: '/api/developer/project',
-        method: 'get',
-    })
-}
-
 export function submitIntro(data) {
     return request({
         url: '/api/developer/project/intro',

@@ -71,12 +71,13 @@
                         <p>{{ table.tableDesc }}</p>
                     </div>
                     <el-table :data="table.columns" max-height="250" style="width: 100%">
-                        <el-table-column prop="columnName" label="列名" width="100" />
-                        <el-table-column prop="columnType" label="属性" width="100" />
+                        <el-table-column prop="name" label="列名" width="100" />
+                        <el-table-column prop="data_type" label="属性" width="100" />
+                        <el-table-column prop="default" label="默认值" width="100" />
                         <el-table-column prop="isPrimaryKey" label="主键" width="70" />
                         <el-table-column prop="isForeignKey" label="外键" width="70" />
-                        <el-table-column prop="isNotNull" label="空类型" width="70" />
-                        <el-table-column prop="desc" label="描述" />
+                        <el-table-column prop="is_nullable" label="空类型" width="70" />
+                        <el-table-column prop="comment" label="注释" />
                     </el-table>
                 </div>
                 <div class="dot-line" />
@@ -132,10 +133,10 @@ export default {
                     } else {
                         this.projectDetail.tables[i].columns[j].isForeignKey = ''
                     }
-                    if (this.projectDetail.tables[i].columns[j].isNotNull) {
-                        this.projectDetail.tables[i].columns[j].isNotNull = '√'
+                    if (this.projectDetail.tables[i].columns[j].is_nullable) {
+                        this.projectDetail.tables[i].columns[j].is_nullable = '√'
                     } else {
-                        this.projectDetail.tables[i].columns[j].isNotNull = ''
+                        this.projectDetail.tables[i].columns[j].is_nullable = '×'
                     }
                 }
             }
