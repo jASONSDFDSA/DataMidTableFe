@@ -5,29 +5,31 @@
         <el-form :model="form" :rules="formRules" ref="form" label-width="auto" style="width: 600px"
             :disabled="form.type === 'Midtable'">
             <el-form-item label="API名称" prop="name">
-                <el-input v-model="form.name" style="width:200px" />
+                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" :disabled="form.type !== 'User'" />
             </el-form-item>
             <el-form-item label="类型" style="width:400px" prop="type">
                 <el-select v-model="form.type" disabled>
                     <el-option label="由中台向项目用户提供" value="Midtable" />
                     <el-option label="由项目用户向中台提供" value="User" />
+                    <el-option label="中台要求项目用户实现" value="Require" />
                 </el-select>
             </el-form-item>
             <el-form-item label="URL" prop="url">
-                <el-input v-model="form.url" />
+                <el-input v-model="form.url" placeholder="请输入URL" />
             </el-form-item>
             <el-form-item label="简介" prop="desc">
-                <el-input v-model="form.desc" type="textarea" />
+                <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" :disabled="form.type !== 'User'" />
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" />
+                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" :disabled="form.type !== 'User'" />
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" />
+                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" :disabled="form.type !== 'User'" />
             </el-form-item>
         </el-form>
         <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'Midtable'">保存</el-button>
+            <el-button type="danger" v-if="form.id !== -1 && form.type === 'User'" @click="deleteAPI(form.id)">删除</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>
@@ -43,6 +45,7 @@
             <el-select v-model="type" placeholder="请选择API类型" size="large" style="width:400px">
                 <el-option label="由项目用户向中台提供" value="User"></el-option>
                 <el-option label="由中台向项目用户提供" value="Midtable"></el-option>
+                <el-option label="中台要求项目用户实现" value="Require"></el-option>
             </el-select>
             <div class="search-button">
                 <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
@@ -56,9 +59,9 @@
             </div>
         </div>
         <el-scrollbar height="72vh">
-            <div v-for="apiInfo in apiInfos" :key="apiInfo.id" class="apiInfo" @click="watchDetails(apiInfo.id)">
+            <div v-for="apiInfo in apiInfos" :key="apiInfo.id" class="apiInfo">
                 <el-row>
-                    <el-col :span="16">
+                    <el-col :span="16" @click="watchDetails(apiInfo.id)">
                         <div class="apiInfo-header">
                             <p>{{ apiInfo.title }}</p>
                         </div>
@@ -66,15 +69,18 @@
                             <p>{{ apiInfo.content }}</p>
                         </div>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" @click="watchDetails(apiInfo.id)">
                         <div class="apiInfo-type">
-                            <p><b>类型：</b>{{ apiInfo.type }}</p>
+                            <p :style="textcolor(apiInfo.type)"><b>类型：</b>{{ apiInfo.type }}</p>
                             <p><b>创建时间：</b>{{ apiInfo.time }}</p>
                         </div>
                     </el-col>
                     <el-col :span="2">
-                        <div class="apiInfo-button">
+                        <div :class="buttonClass(apiInfo.type)">
                             <el-button type="info" @click="watchDetails(apiInfo.id)">查看详情</el-button>
+                        </div>
+                        <div :class="buttonClass(apiInfo.type)">
+                            <el-button type="danger" v-if="apiInfo.type === '由项目用户向中台提供'" @click="deleteAPI(apiInfo.id)">删除</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -92,7 +98,8 @@
 <script>
 
 import { getApiList, getApiPages, getSearchPages, searchAPIs, getAPIDetails, saveAPI } from '@/api/apiInfo'
-import { ElMessage } from 'element-plus'
+import { deleteAPI } from '@/api/admin'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
     data() {
@@ -137,6 +144,18 @@ export default {
             isUser: false,
         }
     },
+    computed: {
+        textcolor() {
+            return function (type) {
+                return type === '中台要求项目用户实现' ? 'color: red;' : 'color: black;';
+            } 
+        },
+        buttonClass() {
+            return function (type) {
+                return type === '由项目用户向中台提供' ? 'apiInfo-button' : 'apiInfo-button-2';
+            }
+        }
+    },
     methods: {
         refresh() {
             this.isSearching = false
@@ -166,6 +185,25 @@ export default {
                 ElMessage.error('获取API信息失败')
             }).finally(() => {
                 this.isLoading = false
+            })
+        },
+        deleteAPI(id) {
+            ElMessageBox.confirm('确认删除该API？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const params = {
+                    id: id
+                }
+                deleteAPI(params).then(() => {
+                    this.refresh()
+                    ElMessage.success('删除成功')
+                }).catch(() => {
+                    ElMessage.error('删除失败')
+                })
+            }).catch(() => {
+                ElMessage.info('已取消')
             })
         },
         goSearch() {
@@ -224,8 +262,8 @@ export default {
                     this.apiInfos[i].type = '由项目用户向中台提供'
                 } else if (this.apiInfos[i].type == 'Midtable') {
                     this.apiInfos[i].type = '由中台向项目用户提供'
-                } else {
-                    this.apiInfos[i].type = '未知'
+                } else if (this.apiInfos[i].type == 'Require') {
+                    this.apiInfos[i].type = '中台要求项目用户实现'
                 }
             }
         },
@@ -335,6 +373,13 @@ export default {
 }
 
 .apiInfo-button {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.apiInfo-button-2 {
     height: 100%;
     display: flex;
     justify-content: center;

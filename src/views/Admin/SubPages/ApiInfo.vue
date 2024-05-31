@@ -5,30 +5,34 @@
         <el-form :model="form" :rules="formRules" ref="form" label-width="auto" style="width: 600px"
             :disabled="form.type === 'User'">
             <el-form-item label="API名称" prop="name">
-                <el-input v-model="form.name" style="width:200px" />
+                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
             </el-form-item>
-            <el-form-item label="类型" style="width:400px" prop="type">
-                <el-select v-model="form.type" disabled>
+            <el-form-item label="类型" style="width:400px;" prop="type">
+                <el-select v-model="form.type" placeholder="请选择API类型" :disabled="form.id !== -1">
                     <el-option label="由中台向项目用户提供" value="Midtable" />
-                    <el-option label="由项目用户向中台提供" value="User" />
+                    <el-option disabled label="由项目用户向中台提供" value="User" />
+                    <el-option label="中台要求项目用户实现" value="Require" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="URL" prop="url">
-                <el-input v-model="form.url" />
+            <el-form-item v-if="form.id !== -1 || form.type !== 'Require'" label="URL" prop="url">
+                <el-input v-model="form.url" :disabled="form.type === 'Require'" placeholder="请输入URL" />
+            </el-form-item>
+            <el-form-item v-else label="项目名" prop="projectname">
+                <el-input v-model="form.projectname" placeholder="请输入指定项目名" />
             </el-form-item>
             <el-form-item label="简介" prop="desc">
-                <el-input v-model="form.desc" type="textarea" />
+                <el-input v-model="form.desc" type="textarea" placeholder="请输入项目简介" />
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" />
+                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" />
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" />
+                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" />
             </el-form-item>
         </el-form>
         <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'User'">保存</el-button>
-            <el-button type="danger" @click="deleteAPI(form.id)" :disabled="form.type === 'User'">删除</el-button>
+            <el-button type="danger" v-if="form.id !== -1" @click="deleteAPI(form.id)" :disabled="form.type === 'User'">删除</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>
@@ -44,6 +48,7 @@
             <el-select v-model="type" placeholder="请选择API类型" size="large" style="width:400px">
                 <el-option label="由项目用户向中台提供" value="User"></el-option>
                 <el-option label="由中台向项目用户提供" value="Midtable"></el-option>
+                <el-option label="中台要求项目用户实现" value="Require"></el-option>
             </el-select>
             <div class="search-button">
                 <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
@@ -112,9 +117,10 @@ export default {
             isLoading: false,
             type: '',
             form: {
-                id: 0,
+                id: -1,
                 name: '',
                 type: '',
+                projectname: '',
                 url: '',
                 desc: '',
                 request: '',
@@ -128,6 +134,12 @@ export default {
                     { required: true, message: '请输入API URL', trigger: 'blur' },
                     { pattern: /^http(s)?:\/\/.*/, message: '请输入正确的URL', trigger: 'blur' }
                 ],
+                type: [
+                    { required: true, message: '请选择API类型', trigger: 'blur' }
+                ],
+                projectname: [
+                    { required: true, message: '请输入项目名', trigger: 'blur' }
+                ],
                 desc: [
                     { required: true, message: '请输入API简介', trigger: 'blur' }
                 ],
@@ -139,7 +151,6 @@ export default {
                 ]
             },
             isShowed: false,
-            isUser: false,
         }
     },
     methods: {
@@ -174,6 +185,10 @@ export default {
             })
         },
         deleteAPI(id) {
+            if (id == -1) {
+                ElMessage.error('无法删除')
+                return
+            }
             ElMessageBox.confirm('确认删除该API？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -248,8 +263,8 @@ export default {
                     this.apiInfos[i].type = '由项目用户向中台提供'
                 } else if (this.apiInfos[i].type == 'Midtable') {
                     this.apiInfos[i].type = '由中台向项目用户提供'
-                } else {
-                    this.apiInfos[i].type = '未知'
+                } else if (this.apiInfos[i].type == 'Require') {
+                    this.apiInfos[i].type = '中台要求项目用户实现'
                 }
             }
         },
@@ -263,8 +278,6 @@ export default {
         },
         addAPI() {
             this.isShowed = true
-            this.form.type = 'Midtable'
-            this.isUser = false
             this.form.id = -1
         },
         onSubmit() {
@@ -376,4 +389,5 @@ export default {
 .inner-block {
     width: fit-content;
 }
+
 </style>
