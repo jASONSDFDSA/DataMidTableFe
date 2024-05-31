@@ -3,28 +3,29 @@
     <el-dialog v-model="isShowed" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false"
         destroy-on-close width="640px">
         <el-form :model="form" :rules="formRules" ref="form" label-width="auto" style="width: 600px"
-            :disabled="form.type === 'Midtable'">
+            :disabled="form.type === 'Midtable' || form.type === 'User'">
             <el-form-item label="API名称" prop="name">
-                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" :disabled="form.type !== 'User'" />
+                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
             </el-form-item>
             <el-form-item label="类型" style="width:400px" prop="type">
                 <el-select v-model="form.type" disabled>
                     <el-option label="由中台向项目用户提供" value="Midtable" />
                     <el-option label="由项目用户向中台提供" value="User" />
                     <el-option label="中台要求项目用户实现" value="Require" />
+                    <el-option label="本项目向中台提供" value="Me" />
                 </el-select>
             </el-form-item>
             <el-form-item label="URL" prop="url">
                 <el-input v-model="form.url" placeholder="请输入URL" />
             </el-form-item>
             <el-form-item label="简介" prop="desc">
-                <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" :disabled="form.type !== 'User'" />
+                <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" />
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" :disabled="form.type !== 'User'" />
+                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" />
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" :disabled="form.type !== 'User'" />
+                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -46,6 +47,7 @@
                 <el-option label="由项目用户向中台提供" value="User"></el-option>
                 <el-option label="由中台向项目用户提供" value="Midtable"></el-option>
                 <el-option label="中台要求项目用户实现" value="Require"></el-option>
+                <el-option label="本项目向中台提供" value="Me"></el-option>
             </el-select>
             <div class="search-button">
                 <el-button color="#529b2e" @click="goSearch()" round>搜索</el-button>
@@ -80,7 +82,7 @@
                             <el-button type="info" @click="watchDetails(apiInfo.id)">查看详情</el-button>
                         </div>
                         <div :class="buttonClass(apiInfo.type)">
-                            <el-button type="danger" v-if="apiInfo.type === '由项目用户向中台提供'" @click="deleteAPI(apiInfo.id)">删除</el-button>
+                            <el-button type="danger" v-if="apiInfo.type === '本项目向中台提供'" @click="deleteAPI(apiInfo.id)">删除</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -141,18 +143,17 @@ export default {
                 ]
             },
             isShowed: false,
-            isUser: false,
         }
     },
     computed: {
         textcolor() {
             return function (type) {
-                return type === '中台要求项目用户实现' ? 'color: red;' : 'color: black;';
+                return type === '中台要求项目用户实现' || type === '本项目向中台提供' ? 'color: red;' : 'color: black;';
             } 
         },
         buttonClass() {
             return function (type) {
-                return type === '由项目用户向中台提供' ? 'apiInfo-button' : 'apiInfo-button-2';
+                return type === '本项目向中台提供' ? 'apiInfo-button' : 'apiInfo-button-2';
             }
         }
     },
@@ -264,6 +265,8 @@ export default {
                     this.apiInfos[i].type = '由中台向项目用户提供'
                 } else if (this.apiInfos[i].type == 'Require') {
                     this.apiInfos[i].type = '中台要求项目用户实现'
+                } else if (this.apiInfos[i].type == 'Me') {
+                    this.apiInfos[i].type = '本项目向中台提供'
                 }
             }
         },
@@ -277,8 +280,7 @@ export default {
         },
         addAPI() {
             this.isShowed = true
-            this.form.type = 'User'
-            this.isUser = true
+            this.form.type = 'Me'
             this.form.id = -1
         },
         onSubmit() {

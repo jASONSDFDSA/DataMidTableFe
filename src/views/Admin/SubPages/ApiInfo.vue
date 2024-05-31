@@ -8,17 +8,17 @@
                 <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
             </el-form-item>
             <el-form-item label="类型" style="width:400px;" prop="type">
-                <el-select v-model="form.type" placeholder="请选择API类型" :disabled="form.id !== -1">
+                <el-select v-model="form.type" disabled placeholder="请选择API类型">
                     <el-option label="由中台向项目用户提供" value="Midtable" />
-                    <el-option disabled label="由项目用户向中台提供" value="User" />
+                    <el-option label="由项目用户向中台提供" value="User" />
                     <el-option label="中台要求项目用户实现" value="Require" />
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="form.id !== -1 || form.type !== 'Require'" label="URL" prop="url">
-                <el-input v-model="form.url" :disabled="form.type === 'Require'" placeholder="请输入URL" />
+            <el-form-item v-if="form.type === 'User'" label="项目名称" prop="projectname">
+                <el-select v-model="form.projectname" :options="options" placeholder="请选择项目名称" />
             </el-form-item>
-            <el-form-item v-else label="项目名" prop="projectname">
-                <el-input v-model="form.projectname" placeholder="请输入指定项目名" />
+            <el-form-item v-if="form.type !== 'Require'" label="URL" prop="url">
+                <el-input v-model="form.url" :disabled="form.type === 'Require'" placeholder="请输入URL" />
             </el-form-item>
             <el-form-item label="简介" prop="desc">
                 <el-input v-model="form.desc" type="textarea" placeholder="请输入项目简介" />
@@ -32,7 +32,8 @@
         </el-form>
         <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'User'">保存</el-button>
-            <el-button type="danger" v-if="form.id !== -1" @click="deleteAPI(form.id)" :disabled="form.type === 'User'">删除</el-button>
+            <el-button type="danger" v-if="form.id !== -1" @click="deleteAPI(form.id)"
+                :disabled="form.type === 'User'">删除</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>
@@ -103,6 +104,7 @@
 import { getApiList, getApiPages, getSearchPages, searchAPIs, getAPIDetails, saveAPI } from '@/api/apiInfo'
 import { deleteAPI } from '@/api/admin'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import storage from '@/store/storage';
 
 export default {
     data() {
@@ -137,9 +139,6 @@ export default {
                 type: [
                     { required: true, message: '请选择API类型', trigger: 'blur' }
                 ],
-                projectname: [
-                    { required: true, message: '请输入项目名', trigger: 'blur' }
-                ],
                 desc: [
                     { required: true, message: '请输入API简介', trigger: 'blur' }
                 ],
@@ -151,6 +150,20 @@ export default {
                 ]
             },
             isShowed: false,
+        }
+    },
+    computed: {
+        options() {
+            const projects = []
+            let users = storage.get('users')
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].identity == 'Developer')
+                    projects.push({
+                        value: users[i].username,
+                        label: users[i].username
+                    })
+            }
+            return projects;
         }
     },
     methods: {
@@ -279,6 +292,7 @@ export default {
         addAPI() {
             this.isShowed = true
             this.form.id = -1
+            this.form.type = 'Midtable'
         },
         onSubmit() {
             this.$refs.form.validate((valid) => {
@@ -389,5 +403,4 @@ export default {
 .inner-block {
     width: fit-content;
 }
-
 </style>

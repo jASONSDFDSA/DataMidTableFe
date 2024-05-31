@@ -321,6 +321,7 @@ export default {
         reset(formName) {
             if(this.$refs[formName] !== undefined && this.$refs[formName] !== null)
                 this.$refs[formName].resetFields();
+            this.$refs[formName].clearValidate();
         },
         // eslint-disable-next-line no-unused-vars
         handleClick(tab, event) {
