@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <el-scrollbar height="72vh">
+        <el-scrollbar height="72vh" ref="scrollbar">
             <div v-for="apiInfo in apiInfos" :key="apiInfo.id" class="apiInfo">
                 <el-row>
                     <el-col :span="16" @click="watchDetails(apiInfo.id)">
@@ -107,6 +107,7 @@ export default {
     data() {
         return {
             apiInfos: [],
+            scrollbar: null,
             search: '',
             offset: 0,
             limit: 5,
@@ -165,6 +166,7 @@ export default {
             this.search = ''
             this.getAllPages()
             this.getNewAPIs()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getAllPages() {
             this.isLoading = true
@@ -213,6 +215,7 @@ export default {
             this.curpage = 1
             this.getSearchPages()
             this.searchAPIs()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getSearchPages() {
             this.isLoading = true
@@ -255,6 +258,7 @@ export default {
             } else {
                 this.getNewAPIs()
             }
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         handleType() {
             console.log(this.apiInfos)

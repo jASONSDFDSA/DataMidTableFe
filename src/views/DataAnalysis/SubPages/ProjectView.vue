@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <el-scrollbar height="72vh">
+        <el-scrollbar height="72vh" ref="scrollbar">
             <div v-for="project in projects" :key="project.id" class="project" @click="watchDetails(project.title)">
                 <el-row>
                     <el-col :span="3">
@@ -57,6 +57,7 @@ export default {
         return {
             projects: [],
             search: '',
+            scrollbar: null,
             offset: 0,
             limit: 3,
             isSearching: false,
@@ -73,6 +74,7 @@ export default {
             this.search = ''
             this.getAllPages()
             this.getNewProjects()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getAllPages() {
             this.isLoading = true;
@@ -98,6 +100,7 @@ export default {
             this.offset = 0
             this.curpage = 1
             this.searchProjects()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getSearchProjectPages() {
             this.isLoading = true
@@ -135,6 +138,7 @@ export default {
             } else {
                 this.getNewProjects()
             }
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         watchDetails(title) {
             this.$router.push({ name: 'AnalyzerProjectDetails', params: { projectname: title } })

@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <el-scrollbar height="72vh">
+        <el-scrollbar height="72vh" ref="scrollbar">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -54,6 +54,7 @@ export default {
         return {
             messages: [],
             search: '',
+            scrollbar: null,
             offset: 0,
             limit: 5,
             isSearching: false,
@@ -81,6 +82,7 @@ export default {
             this.search = ''
             this.getAllPages()
             this.getNewMessages()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getAllPages() {
             this.isLoading = true
@@ -107,6 +109,7 @@ export default {
             this.curpage = 1
             this.getSearchPages()
             this.searchMessages()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getSearchPages() {
             this.isLoading = true
@@ -144,6 +147,7 @@ export default {
             } else {
                 this.getNewMessages()
             }
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         }
     },
     beforeMount() {

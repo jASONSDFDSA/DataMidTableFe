@@ -26,7 +26,7 @@
             </el-form-item>
         </el-form>
         <template #footer>
-            <el-button color="#529b2e" @click="publishMessage()">发布</el-button>
+            <el-button type="primary" @click="publishMessage()">发布</el-button>
             <el-button type="danger" @click="clearPublishBox()">取消</el-button>
         </template>
     </el-dialog>
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <el-scrollbar height="72vh">
+        <el-scrollbar height="72vh" ref="scrollbar">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -89,6 +89,7 @@ export default {
     data() {
         return {
             messages: [],
+            scrollbar: null,
             search: '',
             offset: 0,
             limit: 5,
@@ -156,6 +157,7 @@ export default {
             this.search = ''
             this.getAllPages()
             this.getNewMessages()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         showPublish() {
             this.isPublishing = true
@@ -205,6 +207,7 @@ export default {
             this.curpage = 1
             this.getSearchPages()
             this.searchMessages()
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         },
         getSearchPages() {
             this.isLoading = true
@@ -242,6 +245,7 @@ export default {
             } else {
                 this.getNewMessages()
             }
+            this.$refs.scrollbar.scrollTo({ top: 0, behavior: 'smooth' })
         }
     },
     beforeMount() {
