@@ -1,17 +1,4 @@
 <template>
-    <el-dialog title="申请权限" v-model="isApplying" width="30%">
-        <el-form :model="authType" :rules="authTypeRules" label-width="80px">
-            <el-form-item label="权限类别" prop="authType">
-                <el-select v-model="authType" placeholder="请选择权限类别">
-                    <el-option v-for="item in applyOptions" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-            </el-form-item>
-            <div class="center">
-                <el-button type="success" @click="confirmApply()">确认</el-button>
-                <el-button type="danger" @click="cancelApply()">取消</el-button>
-            </div>
-        </el-form>
-    </el-dialog>
     <el-scrollbar height="80vh">
         <!-- Project Logo and Name -->
         <div class="pd-header">
@@ -82,7 +69,6 @@
                     <div class="pd-table">
                         <div class="button_align">
                             <h3>{{ table.tableName }}</h3>
-                            <el-button type="success" color="#529b2e" @click="applyAuth(table)">申请权限</el-button>
                         </div>
                         <p>{{ table.tableDesc }}</p>
                     </div>
@@ -104,34 +90,11 @@
 
 <script>
 import { getProjectDetails } from '@/api/projectView'
-import { applyAuth } from '@/api/project';
 import { ElMessage } from 'element-plus';
 export default {
     data() {
         return {
             projectDetail: {},
-            isApplying: false,
-            applyOptions: [
-                {
-                    value: '无权限',
-                    label: '无权限'
-                },
-                {
-                    value: '只读',
-                    label: '只读'
-                },
-                {
-                    value: '读写',
-                    label: '读写'
-                }
-            ],
-            authType: '',
-            authTypeRules: {
-                authType: [
-                    { required: true, message: '请选择权限类别', trigger: 'blur' }
-                ]
-            },
-            chosenTable: {},
         }
     },
     methods: {
@@ -181,36 +144,7 @@ export default {
             }
         },
         goBack() {
-            this.$router.push({ name: 'AnalyzerProjectView' })
-        },
-        applyAuth(table) {
-            this.isApplying = true;
-            this.chosenTable = table;
-        },
-        cancelApply() {
-            this.isApplying = false;
-            this.chosenTable = {};
-            this.authType = '';
-        },
-        confirmApply() {
-            if (this.authType === '') {
-                ElMessage.error('请选择权限类别')
-                return
-            }
-            const params = {
-                projectname: this.projectDetail.projectname,
-                tableName: this.chosenTable.tableName,
-                authType: this.authType
-            }
-            applyAuth(params).then(() => {
-                ElMessage.success('申请成功')
-                this.isApplying = false;
-                this.chosenTable = {};
-                this.authType = '';
-            }).catch(err => {
-                console.log(err)
-                this.chosenTable = {};
-            })
+            this.$router.push({ name: 'AdminUserManagement' })
         },
     },
     beforeMount() {

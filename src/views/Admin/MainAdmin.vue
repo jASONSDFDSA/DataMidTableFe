@@ -25,17 +25,17 @@
                                 <Message />
                             </el-icon>通知</el-menu-item>
                         <el-menu-item index="2" class="menu-item"><el-icon>
+                                <Setting />
+                            </el-icon>权限管理</el-menu-item>
+                        <el-menu-item index="3" class="menu-item"><el-icon>
                                 <Avatar />
                             </el-icon>用户管理</el-menu-item>
-                        <el-menu-item index="3" class="menu-item"><el-icon>
+                        <el-menu-item index="4" class="menu-item"><el-icon>
                                 <Monitor />
                             </el-icon>平台监控</el-menu-item>
-                        <el-menu-item index="4" class="menu-item"><el-icon>
+                        <el-menu-item index="5" class="menu-item"><el-icon>
                                 <Files />
                             </el-icon>SQL数据库</el-menu-item>
-                        <el-menu-item index="5" class="menu-item"><el-icon>
-                                <FolderOpened />
-                            </el-icon>公有数据</el-menu-item>
                         <el-menu-item index="6" class="menu-item"><el-icon>
                                 <Document />
                             </el-icon>API信息</el-menu-item>
@@ -121,16 +121,16 @@ export default {
                     this.$router.push({name: 'AdminMessage'})
                     break
                 case '2':
-                    this.$router.push({name: 'AdminUserManagement'})
+                    this.$router.push({ name: 'AdminAuthManagement' })
                     break
                 case '3':
-                    this.$router.push({name: 'AdminMonitor'})
+                    this.$router.push({name: 'AdminUserManagement'})
                     break
                 case '4':
-                    this.$router.push({ name: 'AdminSQL' })
+                    this.$router.push({name: 'AdminMonitor'})
                     break
                 case '5':
-                    this.$router.push({ name: 'AdminPublicData' })
+                    this.$router.push({ name: 'AdminSQL' })
                     break
                 case '6':
                     this.$router.push({ name: 'AdminApiInfo' })

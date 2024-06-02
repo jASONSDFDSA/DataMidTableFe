@@ -387,7 +387,8 @@ export default {
                 name: '',
                 phone: '',
                 email: '',
-                job: ''
+                job: '',
+                id: -1
             },
             member_rules: {
                 name: [
@@ -414,7 +415,8 @@ export default {
                 username: '',
                 password: '',
                 midTable: '',
-                desc: ''
+                desc: '',
+                id: -1
             },
             syncRules: {
                 database: [
@@ -570,7 +572,7 @@ export default {
             this.$refs['member_form'].validate((valid) => {
                 if (valid) {
                     const params = {
-                        isMember: this.isMember,
+                        id: this.member_form.id,
                         name: this.member_form.name,
                         phone: this.member_form.phone,
                         email: this.member_form.email,
@@ -595,6 +597,7 @@ export default {
                         this.member_form.email = ''
                         this.member_form.job = ''
                         this.isMember = false
+                        this.member_form.id = -1
                         this.memberVisible = false
                     })
                 }
@@ -602,12 +605,14 @@ export default {
         },
         cancelMember() {
             this.memberVisible = false
+            this.member_form.id = -1
             this.member_form.name = ''
             this.member_form.phone = ''
             this.member_form.email = ''
             this.member_form.job = ''
         },
         editMember(member) {
+            this.member_form.id = member.id
             this.member_form.name = member.name
             this.member_form.phone = member.phone
             this.member_form.email = member.email
@@ -621,7 +626,10 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                deleteMember(member).then(() => {
+                const params = {
+                    id: member.id
+                }
+                deleteMember(params).then(() => {
                     this.getProjectDetails()
                     ElMessage.success('删除成功')
                 }).catch(() => {
@@ -629,8 +637,9 @@ export default {
                 })
             })
         },
-        syncConfig() {
+        syncConfig(table) {
             this.syncVisible = true
+            this.syncForm.id = table.id
             this.isTable = true
         },
         submitSync() {
@@ -645,7 +654,7 @@ export default {
                         password: this.syncForm.password,
                         midTable: this.syncForm.midTable,
                         desc: this.syncForm.desc,
-                        isTable: this.isTable
+                        id: this.syncForm.id
                     }
                     submitSync(params).then(() => {
                         this.getProjectDetails()
@@ -659,6 +668,7 @@ export default {
                         this.syncForm.password = ''
                         this.syncForm.midTable = ''
                         this.syncForm.desc = ''
+                        this.syncForm.id = -1
                         this.isTable = false
                     }).catch(() => {
                         ElMessage.error('同步失败')
@@ -676,6 +686,7 @@ export default {
             this.syncForm.password = ''
             this.syncForm.midTable = ''
             this.syncForm.desc = ''
+            this.syncForm.id = -1
             this.isTable = false
         },
         deleteTable(table) {
@@ -685,8 +696,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 const params = {
-                    projectname: this.projectDetail.projectname,
-                    tablename: table.tableName
+                    id: table.id
                 }
                 deleteTable(params).then(() => {
                     this.getProjectDetails()

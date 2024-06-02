@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <el-scrollbar height="72vh" ref="scrollbar">
+        <el-scrollbar height="70vh" ref="scrollbar">
             <div v-for="message in messages" :key="message.id" class="message">
                 <div class="message-header">
                     <h1>{{ message.title }}</h1>
@@ -131,7 +131,7 @@ export default {
                 if (this.publishForm.type === users[i].identity) {
                     options.push({
                         label: users[i].username,
-                        value: users[i].username
+                        value: users[i].id
                     })
                 }
             }

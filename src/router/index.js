@@ -62,9 +62,9 @@ const routes = [
                 component: () => import("../views/Admin/SubPages/ApiInfo.vue")
             },
             {
-                name: "AdminPublicData",
-                path: "publicdata",
-                component: () => import("../views/Admin/SubPages/MyProjectDetails.vue")
+                name: "AdminAuthManagement",
+                path: "authmanagement",
+                component: () => import("../views/Admin/SubPages/AuthManagement.vue")
             }
         ]
     },
