@@ -31,9 +31,6 @@
                         <h4>时间：{{ message.time }}</h4>
                     </div>
                 </div>
-                <div class="message-button">
-                    <el-button type="danger" @click="deleteMessage(message.id)">删除</el-button>
-                </div>
             </div>
         </el-scrollbar>
         <div class="example-pagination-block">

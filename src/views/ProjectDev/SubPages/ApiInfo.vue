@@ -5,7 +5,7 @@
         <el-form :model="form" :rules="formRules" ref="form" label-width="auto" style="width: 600px"
             :disabled="form.type === 'Midtable' || form.type === 'User'">
             <el-form-item label="API名称" prop="name">
-                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
+                <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" :disabled="form.type==='Require'"/>
             </el-form-item>
             <el-form-item label="类型" style="width:400px" prop="type">
                 <el-select v-model="form.type" disabled>
@@ -19,13 +19,13 @@
                 <el-input v-model="form.url" placeholder="请输入URL" />
             </el-form-item>
             <el-form-item label="简介" prop="desc">
-                <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" />
+                <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" :disabled="form.type==='Require'"/>
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" />
+                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" :disabled="form.type==='Require'"/>
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" />
+                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" :disabled="form.type==='Require'"/>
             </el-form-item>
         </el-form>
         <template #footer>

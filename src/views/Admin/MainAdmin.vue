@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { getAllUsers } from '@/api/admin'
+import { getAllTables, getAllUsers } from '@/api/admin'
 import { changePassword } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import storage from '@/store/storage'
@@ -193,6 +193,11 @@ export default {
             ElMessage.success('获取用户信息成功')
         }).catch(() => {
             ElMessage.error('获取所有用户信息失败，请刷新页面重试')
+        })
+        getAllTables().then(res => {
+            storage.set('tables', res.data.tables)
+        }).catch(() => {
+            ElMessage.error('获取所有数据表失败，请刷新页面重试')
         })
     }
 }

@@ -14,11 +14,10 @@ export function getUsersDetails() {
     })
 }
 
-export function getTables(projectname) {
+export function getAllTables() {
     return request({
         url: '/api/admin/tables',
         method: 'get',
-        params: { id: projectname }
     })
 }
 

@@ -47,6 +47,7 @@
             <el-radio-group v-model="inviteType" style="margin-top: 20px;">
                 <el-radio value="Analyzer">数据分析用户</el-radio>
                 <el-radio value="Developer">项目开发用户</el-radio>
+                <el-radio value="Admin">管理员</el-radio>
             </el-radio-group>
         </div>
     </el-scrollbar>

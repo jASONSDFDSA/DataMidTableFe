@@ -34,7 +34,7 @@ export function deleteMember(data) {
 
 export function submitSync(data) {
     return request({
-        url: '/api/developer/project/table',
+        url: '/api/project/newprojecttable',
         method: 'post',
         data
     })
@@ -42,7 +42,7 @@ export function submitSync(data) {
 
 export function deleteTable(data) {
     return request({
-        url: '/api/developer/project/table',
+        url: '/api/project/deleteprojecttable',
         method: 'delete',
         data
     })

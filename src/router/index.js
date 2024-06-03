@@ -65,6 +65,11 @@ const routes = [
                 name: "AdminAuthManagement",
                 path: "authmanagement",
                 component: () => import("../views/Admin/SubPages/AuthManagement.vue")
+            },
+            {
+                name: "AdminMonitor",
+                path: "monitor",
+                component: () => import("../views/Admin/SubPages/Monitor.vue")
             }
         ]
     },

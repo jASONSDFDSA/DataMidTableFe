@@ -108,8 +108,8 @@
     <el-dialog title="同步配置" v-model="syncVisible" :show-close="false" :close-on-click-modal="false"
         :close-on-press-escape="false" destroy-on-close width="fit-content">
         <el-form :model="syncForm" :rules="syncRules" ref="syncForm" label-width="auto" style="width: 600px">
-            <el-form-item label="数据源库名" prop="database">
-                <el-input v-model="syncForm.database" placeholder="请输入数据源库名">
+            <el-form-item label="数据源库名" prop="remote_db_name">
+                <el-input v-model="syncForm.remote_db_name" placeholder="请输入数据源库名">
                     <template #prefix>
                         <el-icon>
                             <coin />
@@ -117,8 +117,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="数据源表名" prop="table">
-                <el-input v-model="syncForm.table" placeholder="请输入数据源表名">
+            <el-form-item label="数据源表名" prop="remote_table_name">
+                <el-input v-model="syncForm.remote_table_name" placeholder="请输入数据源表名">
                     <template #prefix>
                         <el-icon>
                             <folder />
@@ -126,8 +126,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="数据源主机地址" prop="host">
-                <el-input v-model="syncForm.host" placeholder="请输入数据源主机地址">
+            <el-form-item label="数据源主机地址" prop="remote_hostname">
+                <el-input v-model="syncForm.remote_hostname" placeholder="请输入数据源主机地址">
                     <template #prefix>
                         <el-icon>
                             <monitor />
@@ -135,8 +135,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="数据源端口" prop="port">
-                <el-input v-model="syncForm.port" placeholder="请输入数据源端口">
+            <el-form-item label="数据源端口" prop="remote_port">
+                <el-input v-model="syncForm.remote_port" placeholder="请输入数据源端口">
                     <template #prefix>
                         <el-icon>
                             <location />
@@ -144,8 +144,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="数据源用户名" prop="username">
-                <el-input v-model="syncForm.username" placeholder="请输入数据源用户名">
+            <el-form-item label="数据源用户名" prop="remote_username">
+                <el-input v-model="syncForm.remote_username" placeholder="请输入数据源用户名">
                     <template #prefix>
                         <el-icon>
                             <user />
@@ -153,8 +153,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="数据源密码" prop="password">
-                <el-input v-model="syncForm.password" placeholder="请输入数据源密码" type="password" show-password>
+            <el-form-item label="数据源密码" prop="remote_password">
+                <el-input v-model="syncForm.remote_password" placeholder="请输入数据源密码" type="password" show-password>
                     <template #prefix>
                         <el-icon>
                             <key />
@@ -162,8 +162,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="中台表名" prop="midTable">
-                <el-input v-model="syncForm.midTable" placeholder="请输入中台表名">
+            <el-form-item label="中台表名" prop="name">
+                <el-input v-model="syncForm.name" placeholder="请输入中台表名">
                     <template #prefix>
                         <el-icon>
                             <folder />
@@ -171,8 +171,8 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="简介" prop="desc">
-                <el-input type="textarea" v-model="syncForm.desc" rows="5" placeholder="请输入简介"></el-input>
+            <el-form-item label="简介" prop="description">
+                <el-input type="textarea" v-model="syncForm.description" rows="5" placeholder="请输入简介"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -408,39 +408,39 @@ export default {
             },
             isMember: false,
             syncForm: {
-                database: '',
-                table: '',
-                host: '',
-                port: '',
-                username: '',
-                password: '',
-                midTable: '',
-                desc: '',
-                id: -1
+                remote_db_name: '',
+                remote_table_name: '',
+                remote_hostname: '',
+                remote_port: '',
+                remote_username: '',
+                remote_password: '',
+                name: '',
+                description: '',
+                uid: -1
             },
             syncRules: {
-                database: [
+                remote_db_name: [
                     { required: true, message: '请输入数据源库名', trigger: 'blur' }
                 ],
-                table: [
+                remote_table_name: [
                     { required: true, message: '请输入数据源表名', trigger: 'blur' }
                 ],
-                host: [
+                remote_hostname: [
                     { required: true, message: '请输入数据源主机地址', trigger: 'blur' }
                 ],
-                port: [
+                remote_port: [
                     { required: true, message: '请输入数据源端口', trigger: 'blur' }
                 ],
-                username: [
+                remote_username: [
                     { required: true, message: '请输入数据源用户名', trigger: 'blur' }
                 ],
-                password: [
+                remote_password: [
                     { required: true, message: '请输入数据源密码', trigger: 'blur' }
                 ],
-                midTable: [
+                name: [
                     { required: true, message: '请输入中台表名', trigger: 'blur' }
                 ],
-                desc: [
+                description: [
                     { required: true, message: '请输入简介', trigger: 'blur' }
                 ]
             },
@@ -646,15 +646,15 @@ export default {
             this.$refs['syncForm'].validate((valid) => {
                 if (valid) {
                     const params = {
-                        database: this.syncForm.database,
-                        table: this.syncForm.table,
-                        host: this.syncForm.host,
-                        port: this.syncForm.port,
-                        username: this.syncForm.username,
-                        password: this.syncForm.password,
-                        midTable: this.syncForm.midTable,
-                        desc: this.syncForm.desc,
-                        id: this.syncForm.id
+                        remote_db_name: this.syncForm.remote_db_name,
+                        remote_table_name: this.syncForm.remote_table_name,
+                        remote_hostname: this.syncForm.remote_hostname,
+                        remote_port: this.syncForm.remote_port,
+                        remote_username: this.syncForm.remote_username,
+                        remote_password: this.syncForm.remote_password,
+                        name: this.syncForm.name,
+                        description: this.syncForm.description,
+                        uid: this.syncForm.uid
                     }
                     submitSync(params).then(() => {
                         this.getProjectDetails()

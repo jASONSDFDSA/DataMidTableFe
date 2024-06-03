@@ -8,9 +8,9 @@
                 <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
             </el-form-item>
             <el-form-item label="类型" style="width:400px;" prop="type">
-                <el-select v-model="form.type" disabled placeholder="请选择API类型">
+                <el-select v-model="form.type" :disabled="form.id!=-1" placeholder="请选择API类型">
                     <el-option label="由中台向项目用户提供" value="Midtable" />
-                    <el-option label="由项目用户向中台提供" value="User" />
+                    <el-option label="由项目用户向中台提供" value="User" disabled />
                     <el-option label="中台要求项目用户实现" value="Require" />
                 </el-select>
             </el-form-item>

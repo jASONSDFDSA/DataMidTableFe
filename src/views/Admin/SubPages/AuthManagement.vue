@@ -7,7 +7,7 @@
                     <el-form-item label="项目">
                         <el-col :span="10">
                             <el-select v-model="form.projectname" placeholder="请选择项目" style="width: 100%"
-                                @change="getTables(form.projectname); form.tablename = '';">
+                                @change="form.tablename = '';">
                                 <el-option v-for="project in projectOptions" :key="project.value" :label="project.label"
                                     :value="project.value" />
                             </el-select>
@@ -43,12 +43,13 @@
             <div style="display:flex; justify-content: center; align-items: center; width:800px;">
                 <span style="margin-right: 10px;">项目</span>
                 <el-select v-model="searchForm.projectname" placeholder="请选择项目" style="width: 260px;"
-                    @change="getTables(searchForm.projectname); searchForm.tablename = '';">
+                    @change="searchForm.tablename = '';">
                     <el-option v-for="project in projectOptions" :key="project.value" :label="project.label"
                         :value="project.value" />
                 </el-select>
                 <span style="margin: 10px;">数据表</span>
-                <el-select v-model="searchForm.tablename" placeholder="请选择数据表" style="width: 260px;">
+                <el-select v-model="searchForm.tablename" placeholder="请选择数据表" @change="console.log(form.tablename);"
+                    style="width: 260px;">
                     <el-option v-for="table in tableOptions" :key="table.value" :label="table.label"
                         :value="table.value" />
                 </el-select>
@@ -68,7 +69,7 @@
                     <div style="display:flex; justify-content: center; align-items: center; width:800px;">
                         <span style="margin-right: 10px;">项目</span>
                         <el-select v-model="requestForm.projectname" placeholder="请选择项目" style="width: 260px;"
-                            @change="getTables(requestForm.projectname); requestForm.tablename = '';">
+                            @change="requestForm.tablename = '';">
                             <el-option v-for="project in projectOptions" :key="project.value" :label="project.label"
                                 :value="project.value" />
                         </el-select>
@@ -120,7 +121,7 @@
 </template>
 
 <script>
-import { getTables, submitAuthEdit, searchAuth, getSearchPages, getAllPages, searchRequests, getRequests, approveRequest, rejectRequest } from '@/api/admin';
+import { submitAuthEdit, searchAuth, getSearchPages, getAllPages, searchRequests, getRequests, approveRequest, rejectRequest } from '@/api/admin';
 import storage from '@/store/storage';
 
 export default {
@@ -153,17 +154,6 @@ export default {
         };
     },
     methods: {
-        getTables(projectname) {
-            this.tableOptions = [];
-            getTables(projectname).then(res => {
-                for (let i = 0; i < res.data.tables.length; i++) {
-                    this.tableOptions.push({
-                        label: res.data.tables[i].table_name,
-                        value: res.data.tables[i].id
-                    });
-                }
-            });
-        },
         onSubmit() {
             if (this.form.projectname === '' || this.form.tablename === '' || this.form.level === '') {
                 this.$message.error('请填写完整信息');
@@ -194,7 +184,7 @@ export default {
             this.tableOptions = [];
         },
         goSearch() {
-            if(this.requestForm.projectname === '' && this.requestForm.tablename === '') {
+            if (this.requestForm.projectname === '' && this.requestForm.tablename === '') {
                 this.$message.error('请填写搜索信息');
                 return;
             }
@@ -236,7 +226,7 @@ export default {
             }).catch(() => {
                 this.$message.error('拒绝请求失败');
             });
-            
+
         },
         acceptMessage(id) {
             const params = {
@@ -302,12 +292,19 @@ export default {
     },
     created() {
         let users = storage.get('users')
+        let tables = storage.get('tables')
         for (let i = 0; i < users.length; i++) {
             if (users[i].identity === 'Developer')
                 this.projectOptions.push({
                     label: users[i].username,
                     value: users[i].id
                 });
+        }
+        for (let i = 0; i < tables.length; i++) {
+            this.tableOptions.push({
+                label: tables[i].table_name,
+                value: tables[i].id
+            })
         }
         this.getAllPages();
         this.getNewProjects();
