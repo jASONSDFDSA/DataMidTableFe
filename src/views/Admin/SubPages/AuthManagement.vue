@@ -40,13 +40,7 @@
         <div class="line" />
         <div class="au-check">
             <h1>权限查看</h1>
-            <div style="display:flex; justify-content: center; align-items: center; width:800px;">
-                <span style="margin-right: 10px;">项目</span>
-                <el-select v-model="searchForm.projectname" placeholder="请选择项目" style="width: 260px;"
-                    @change="searchForm.tablename = '';">
-                    <el-option v-for="project in projectOptions" :key="project.value" :label="project.label"
-                        :value="project.value" />
-                </el-select>
+            <div style="display:flex; justify-content: center; align-items: center; width:100%;">
                 <span style="margin: 10px;">数据表</span>
                 <el-select v-model="searchForm.tablename" placeholder="请选择数据表" @change="console.log(form.tablename);"
                     style="width: 260px;">
@@ -135,7 +129,6 @@ export default {
                 level: ''
             },
             searchForm: {
-                projectname: '',
                 tablename: ''
             },
             tableData: [],
@@ -167,7 +160,7 @@ export default {
             });
         },
         onSearch() {
-            if (this.searchForm.projectname === '' && this.searchForm.tablename === '') {
+            if (this.searchForm.tablename === '') {
                 this.$message.error('请填写查询信息');
                 return;
             }

@@ -108,3 +108,10 @@ export function deleteAPI(data) {
         data
     })
 }
+
+export function getSysInfo() {
+    return request({
+        url: '/api/admin/sysinfo',
+        method: 'get'
+    })
+}

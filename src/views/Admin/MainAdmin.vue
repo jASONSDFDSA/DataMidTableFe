@@ -34,9 +34,6 @@
                                 <Monitor />
                             </el-icon>平台监控</el-menu-item>
                         <el-menu-item index="5" class="menu-item"><el-icon>
-                                <Files />
-                            </el-icon>SQL数据库</el-menu-item>
-                        <el-menu-item index="6" class="menu-item"><el-icon>
                                 <Document />
                             </el-icon>API信息</el-menu-item>
                     </el-menu>
@@ -130,9 +127,6 @@ export default {
                     this.$router.push({name: 'AdminMonitor'})
                     break
                 case '5':
-                    this.$router.push({ name: 'AdminSQL' })
-                    break
-                case '6':
                     this.$router.push({ name: 'AdminApiInfo' })
                     break
             }
@@ -196,6 +190,7 @@ export default {
         })
         getAllTables().then(res => {
             storage.set('tables', res.data.tables)
+            ElMessage.success('获取数据表成功')
         }).catch(() => {
             ElMessage.error('获取所有数据表失败，请刷新页面重试')
         })
