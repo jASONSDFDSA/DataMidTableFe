@@ -120,7 +120,7 @@ export default {
             const option = {
                 title: {
                     text: 'CPU使用率',
-                    subtext: '实时监控',
+                    subtext: '近十日数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -173,7 +173,7 @@ export default {
             const option = {
                 title: {
                     text: '内存使用率',
-                    subtext: '实时监控',
+                    subtext: '近十日数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -226,7 +226,7 @@ export default {
             const option = {
                 title: {
                     text: '交换区使用率',
-                    subtext: '实时监控',
+                    subtext: '近十日数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -280,7 +280,7 @@ export default {
             const option = {
                 title: {
                     text: '磁盘使用率',
-                    subtext: '实时监控',
+                    subtext: '近十日数据',
                     x: 'center'
                 },
                 tooltip: {
