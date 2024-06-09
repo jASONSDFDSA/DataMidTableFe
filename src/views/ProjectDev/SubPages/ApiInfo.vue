@@ -22,15 +22,15 @@
                 <el-input v-model="form.desc" type="textarea" placeholder="请输入简介" :disabled="form.type==='Require'"/>
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" :disabled="form.type==='Require'"/>
+                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" rows="6" :disabled="form.type==='Require'"/>
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" :disabled="form.type==='Require'"/>
+                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" rows="6" :disabled="form.type==='Require'"/>
             </el-form-item>
         </el-form>
         <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'Midtable'">保存</el-button>
-            <el-button type="danger" v-if="form.id !== -1 && form.type === 'User'" @click="deleteAPI(form.id)">删除</el-button>
+            <el-button type="danger" v-if="form.id !== -1 && form.type === 'Me'" @click="deleteAPI(form.id)">删除</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>

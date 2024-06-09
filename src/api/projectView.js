@@ -13,9 +13,9 @@ export function getProjects(offset, limit) {
 
 export function getProjectDetails(projectname) {
     return request({
-        url: '/api/projectDetail',
-        method: 'get',
-        params: {
+        url: '/api/projectdetail',
+        method: 'post',
+        data: {
             projectname: projectname
         }
     })

@@ -8,7 +8,7 @@
                 <el-input v-model="form.name" style="width:200px" placeholder="请输入API名称" />
             </el-form-item>
             <el-form-item label="类型" style="width:400px;" prop="type">
-                <el-select v-model="form.type" :disabled="form.id!=-1" placeholder="请选择API类型">
+                <el-select v-model="form.type" :disabled="form.id != -1" placeholder="请选择API类型">
                     <el-option label="由中台向项目用户提供" value="Midtable" />
                     <el-option label="由项目用户向中台提供" value="User" disabled />
                     <el-option label="中台要求项目用户实现" value="Require" />
@@ -24,16 +24,15 @@
                 <el-input v-model="form.desc" type="textarea" placeholder="请输入项目简介" />
             </el-form-item>
             <el-form-item label="请求格式" prop="request">
-                <el-input v-model="form.request" type="textarea" placeholder="请输入请求格式" />
+                <el-input v-model="form.request" type="textarea" rows="6" placeholder="请输入请求格式" />
             </el-form-item>
             <el-form-item label="响应格式" prop="response">
-                <el-input v-model="form.response" type="textarea" placeholder="请输入响应格式" />
+                <el-input v-model="form.response" type="textarea" rows="6" placeholder="请输入响应格式" />
             </el-form-item>
         </el-form>
         <template #footer>
             <el-button type="primary" @click="onSubmit()" :disabled="form.type === 'User'">保存</el-button>
-            <el-button type="danger" v-if="form.id !== -1" @click="deleteAPI(form.id)"
-                :disabled="form.type === 'User'">删除</el-button>
+            <el-button type="danger" v-if="form.id !== -1" @click="deleteAPI(form.id)">删除</el-button>
             <el-button @click="cancel()">取消</el-button>
         </template>
     </el-dialog>
@@ -215,6 +214,7 @@ export default {
                 deleteAPI(params).then(() => {
                     this.refresh()
                     ElMessage.success('删除成功')
+                    this.isShowed = false
                 }).catch(() => {
                     ElMessage.error('删除失败')
                 })

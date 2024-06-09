@@ -20,7 +20,7 @@
             <div v-for="project in projects" :key="project.id" class="project" @click="watchDetails(project.title)">
                 <el-row>
                     <el-col :span="3">
-                        <img :src="project.image" alt="project"
+                        <img :src="'http://301ebef6.r6.cpolar.top' + project.image" alt="project"
                             style="width: 125px; height: 125px; border-radius: 10px; margin:auto;">
                     </el-col>
                     <el-col :span="19">
@@ -41,7 +41,7 @@
         </el-scrollbar>
         <div class="example-pagination-block">
             <div class="inner-block">
-                <el-pagination v-model:current-page="curpage" :page-count="pages" layout="prev, pager, next" @current-change="handleCurrentChange()"/>
+                <el-pagination v-model:current-page="curpage" :page-count="pages" layout="prev, pager, next" @current-change="handleCurrentChange(curpage)"/>
             </div>
         </div>
     </div>
@@ -144,7 +144,7 @@ export default {
             this.$router.push({ name: 'DeveloperProjectDetails', params: { projectname: title } })
         }
     },
-    beforeMount() {
+    created() {
         this.getAllPages()
         this.getNewProjects()
     }

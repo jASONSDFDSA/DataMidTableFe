@@ -15,7 +15,7 @@
     <el-scrollbar height="80vh">
         <!-- Project Logo and Name -->
         <div class="pd-header">
-            <img :src="projectDetail.logo" alt="logo"
+            <img :src="'http://301ebef6.r6.cpolar.top' + projectDetail.logo" alt="logo"
                 style="width: 150px; height: 150px; border-radius: 10px; margin:auto;" />
             <div class="pd-intro">
                 <div class="pd-name">
@@ -162,7 +162,7 @@ export default {
                     continue
                 }
                 for (let j = 0; j < this.projectDetail.tables[i].columns.length; j++) {
-                    if (this.projectDetail.tables[i].columns[j].isPrimaryKey) {
+                    if (this.projectDetail.tables[i].columns[j].key === 'PRI') {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = '√'
                     } else {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = ''
@@ -181,7 +181,7 @@ export default {
             }
         },
         goBack() {
-            this.$router.push({ name: 'AnalyzerProjectView' })
+            this.$router.push({ name: 'DeveloperProjectView' })
         },
         applyAuth(table) {
             this.isApplying = true;

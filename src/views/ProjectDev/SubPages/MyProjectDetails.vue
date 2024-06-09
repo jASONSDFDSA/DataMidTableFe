@@ -188,7 +188,7 @@
         <!-- Project Logo and Name -->
         <div class="pd-header">
             <div>
-                <img :src="projectDetail.logo" alt="logo"
+                <img :src="'http://301ebef6.r6.cpolar.top' + projectDetail.logo" alt="logo"
                     style="width: 150px; height: 150px; border-radius: 4px; margin:auto;" />
                 <el-icon @click="dialogVisible = true" class="edit-icon">
                     <Edit />
@@ -202,7 +202,6 @@
                             <Edit />
                         </el-icon>
                     </div>
-                    <el-button type="danger" @click="goBack()">返回</el-button>
                 </div>
                 <p class="pd-desc">{{ projectDetail.description }}</p>
             </div>
@@ -297,7 +296,7 @@
                     <h2 style="display: flex; align-items: center;"><el-icon>
                             <Coin />
                         </el-icon>数据</h2>
-                    <el-icon @click="syncVisible = true" class="edit-icon">
+                    <el-icon @click="syncVisible = true; isAdd = true" class="edit-icon">
                         <Plus />
                     </el-icon>
                 </div>
@@ -444,7 +443,8 @@ export default {
                     { required: true, message: '请输入简介', trigger: 'blur' }
                 ]
             },
-            isTable: false
+            isTable: false,
+            isAdd: false
         }
     },
     methods: {
@@ -477,7 +477,7 @@ export default {
                     continue
                 }
                 for (let j = 0; j < this.projectDetail.tables[i].columns.length; j++) {
-                    if (this.projectDetail.tables[i].columns[j].isPrimaryKey) {
+                    if (this.projectDetail.tables[i].columns[j].key == 'PRI') {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = '√'
                     } else {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = ''
@@ -494,9 +494,6 @@ export default {
                     }
                 }
             }
-        },
-        goBack() {
-            this.$router.push({ name: 'DeveloperProjectView' })
         },
         getCrop() {
             // console.log(this.$refs.cropper)
@@ -640,6 +637,14 @@ export default {
         syncConfig(table) {
             this.syncVisible = true
             this.syncForm.id = table.id
+            this.syncForm.remote_db_name = table.remote_db_name
+            this.syncForm.remote_table_name = table.remote_table_name
+            this.syncForm.remote_hostname = table.remote_hostname
+            this.syncForm.remote_port = table.remote_port
+            this.syncForm.remote_username = table.remote_username
+            this.syncForm.remote_password = table.remote_password
+            this.syncForm.name = table.tableName
+            this.syncForm.description = table.description
             this.isTable = true
         },
         submitSync() {
@@ -649,30 +654,59 @@ export default {
                         remote_db_name: this.syncForm.remote_db_name,
                         remote_table_name: this.syncForm.remote_table_name,
                         remote_hostname: this.syncForm.remote_hostname,
-                        remote_port: this.syncForm.remote_port,
+                        remote_port: Number(this.syncForm.remote_port),
                         remote_username: this.syncForm.remote_username,
                         remote_password: this.syncForm.remote_password,
                         name: this.syncForm.name,
                         description: this.syncForm.description,
-                        uid: this.syncForm.uid
                     }
-                    submitSync(params).then(() => {
-                        this.getProjectDetails()
-                        ElMessage.success('同步成功')
-                        this.syncVisible = false
-                        this.syncForm.database = ''
-                        this.syncForm.table = ''
-                        this.syncForm.host = ''
-                        this.syncForm.port = ''
-                        this.syncForm.username = ''
-                        this.syncForm.password = ''
-                        this.syncForm.midTable = ''
-                        this.syncForm.desc = ''
-                        this.syncForm.id = -1
-                        this.isTable = false
-                    }).catch(() => {
-                        ElMessage.error('同步失败')
-                    })
+                    if (!this.isAdd) {
+                        const params1 = {
+                        id: this.syncForm.id
+                        }
+                        deleteTable(params1).then(() => {
+                            this.getProjectDetails()
+                            submitSync(params).then(() => {
+                                this.getProjectDetails()
+                                ElMessage.success('同步成功')
+                                this.syncVisible = false
+                                this.syncForm.database = ''
+                                this.syncForm.table = ''
+                                this.syncForm.host = ''
+                                this.syncForm.port = ''
+                                this.syncForm.username = ''
+                                this.syncForm.password = ''
+                                this.syncForm.midTable = ''
+                                this.syncForm.desc = ''
+                                this.syncForm.id = -1
+                                this.isTable = false
+                            }).catch(() => {
+                                ElMessage.error('同步失败')
+                            })
+                        }).catch(() => {
+                            ElMessage.error('修改失败')
+                        })
+                    }
+                    else {
+                        submitSync(params).then(() => {
+                            this.getProjectDetails()
+                            ElMessage.success('同步成功')
+                            this.syncVisible = false
+                            this.syncForm.database = ''
+                            this.syncForm.table = ''
+                            this.syncForm.host = ''
+                            this.syncForm.port = ''
+                            this.syncForm.username = ''
+                            this.syncForm.password = ''
+                            this.syncForm.midTable = ''
+                            this.syncForm.desc = ''
+                            this.syncForm.id = -1
+                            this.isTable = false
+                        }).catch(() => {
+                            ElMessage.error('同步失败')
+                        })
+                    }
+                    this.isAdd = false
                 }
             })
         },
@@ -688,6 +722,7 @@ export default {
             this.syncForm.desc = ''
             this.syncForm.id = -1
             this.isTable = false
+            this.isAdd = false
         },
         deleteTable(table) {
             ElMessageBox.confirm('确认删除表' + table.tableName + '?', '提示', {

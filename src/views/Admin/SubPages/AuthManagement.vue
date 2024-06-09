@@ -174,7 +174,6 @@ export default {
             this.form.projectname = '';
             this.form.tablename = '';
             this.form.level = '';
-            this.tableOptions = [];
         },
         goSearch() {
             if (this.requestForm.projectname === '' && this.requestForm.tablename === '') {

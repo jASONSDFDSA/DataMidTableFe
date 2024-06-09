@@ -123,7 +123,7 @@ export default {
                     continue
                 }
                 for (let j = 0; j < this.projectDetail.tables[i].columns.length; j++) {
-                    if (this.projectDetail.tables[i].columns[j].isPrimaryKey) {
+                    if (this.projectDetail.tables[i].columns[j].key == 'PRI') {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = '√'
                     } else {
                         this.projectDetail.tables[i].columns[j].isPrimaryKey = ''
