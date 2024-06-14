@@ -1,6 +1,12 @@
 <template>
     <el-dialog title="申请权限" v-model="isApplying" width="30%">
         <el-form :model="authType" :rules="authTypeRules" label-width="80px">
+            <el-form-item label="当前权限" prop="auth">
+                <el-input v-model="chosenTable.auth" disabled />
+            </el-form-item>
+            <el-form-item label="申请状态" prop="request_state">
+                <el-input v-model="chosenTable.request_state" disabled />
+            </el-form-item>
             <el-form-item label="权限类别" prop="authType">
                 <el-select v-model="authType" placeholder="请选择权限类别">
                     <el-option v-for="item in applyOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -105,7 +111,7 @@
 <script>
 import { getProjectDetails } from '@/api/projectView'
 import { applyAuth } from '@/api/project';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 export default {
     data() {
         return {
@@ -197,20 +203,33 @@ export default {
                 ElMessage.error('请选择权限类别')
                 return
             }
-            const params = {
-                projectname: this.projectDetail.projectname,
-                tableName: this.chosenTable.tableName,
-                authType: this.authType
+            if (this.authType === this.chosenTable.auth) {
+                ElMessage.error('权限类别未发生变化')
+                return
             }
-            applyAuth(params).then(() => {
-                ElMessage.success('申请成功')
-                this.isApplying = false;
-                this.chosenTable = {};
-                this.authType = '';
-            }).catch(err => {
-                console.log(err)
-                this.chosenTable = {};
-            })
+            if ((this.authType === '无权限' && this.chosenTable.auth === '只读') || ((this.authType === '无权限' || this.authType === '只读') && this.chosenTable.auth === '读写')) {
+                ElMessageBox.confirm('您确定要降低权限吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const params = {
+                        projectname: this.projectDetail.projectname,
+                        tableName: this.chosenTable.tableName,
+                        authType: this.authType
+                    }
+                    applyAuth(params).then(() => {
+                        ElMessage.success('申请成功')
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }).finally(() => {
+                    this.isApplying = false;
+                    this.chosenTable = {};
+                    this.authType = '';
+                })
+            }
+
         },
     },
     beforeMount() {

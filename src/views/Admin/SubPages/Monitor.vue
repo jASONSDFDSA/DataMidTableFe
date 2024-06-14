@@ -23,12 +23,12 @@
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">内存使用率</p>
                         <el-progress type="dashboard" :percentage="percentageMem" :color="colors" />
-                        <p style="margin:auto">{{ curMem + 'GB / ' + maxMem + "GB" }}</p>
+                        <p style="margin:auto">{{ curMem + 'MB / ' + maxMem + "MB" }}</p>
                     </div>
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">交换区使用率</p>
                         <el-progress type="dashboard" :percentage="percentageShare" :color="colors" />
-                        <p style="margin:auto">{{ curShare + 'GB / ' + maxShare + "GB" }}</p>
+                        <p style="margin:auto">{{ curShare + 'MB / ' + maxShare + "MB" }}</p>
                     </div>
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">磁盘使用率</p>
@@ -119,8 +119,8 @@ export default {
 
             const option = {
                 title: {
-                    text: 'CPU使用率',
-                    subtext: '近十日数据',
+                    text: 'CPU使用情况',
+                    subtext: '近30小时数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -146,7 +146,7 @@ export default {
                     }
                 }],
                 series: [{
-                    name: 'CPU使用率',
+                    name: 'CPU核数',
                     type: 'line',
                     data: cpuY.value,
                     markPoint: {
@@ -172,8 +172,8 @@ export default {
         const initmemChart = () => {
             const option = {
                 title: {
-                    text: '内存使用率',
-                    subtext: '近十日数据',
+                    text: '内存使用情况',
+                    subtext: '近30小时数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -199,7 +199,7 @@ export default {
                     }
                 }],
                 series: [{
-                    name: '内存使用率',
+                    name: '内存占用',
                     type: 'line',
                     data: memY.value,
                     markPoint: {
@@ -225,8 +225,8 @@ export default {
         const initshareChart = () => {
             const option = {
                 title: {
-                    text: '交换区使用率',
-                    subtext: '近十日数据',
+                    text: '交换区使用情况',
+                    subtext: '近30小时数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -252,7 +252,7 @@ export default {
                     }
                 }],
                 series: [{
-                    name: '交换区使用率',
+                    name: '交换区占用',
                     type: 'line',
                     data: shareY.value,
                     markPoint: {
@@ -279,8 +279,8 @@ export default {
         const initdiskChart = () => {
             const option = {
                 title: {
-                    text: '磁盘使用率',
-                    subtext: '近十日数据',
+                    text: '磁盘使用情况',
+                    subtext: '近30小时数据',
                     x: 'center'
                 },
                 tooltip: {
@@ -306,7 +306,7 @@ export default {
                     }
                 }],
                 series: [{
-                    name: '磁盘使用率',
+                    name: '磁盘占用',
                     type: 'line',
                     data: diskY.value,
                     markPoint: {
