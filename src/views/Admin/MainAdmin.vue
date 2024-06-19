@@ -4,15 +4,15 @@
             <el-header class="header">
                 <title>Analyzer</title>
                 <div class="header-name">
-                    <img src="https://sse.sysu.edu.cn/sites/sse.prod.dpcms4.sysu.edu.cn/files/inline-images/%E5%AD%A6%E9%99%A2%E5%90%8D%E7%A7%B02_0.png" alt="logo"
-                        style="width: 236px; height: 36px; cursor: pointer;" @click="jumptoOff">
-                    &nbsp;&nbsp;&nbsp;
-                    <h1><el-icon>
-                            <UserFilled />
-                        </el-icon>&nbsp;后台管理</h1>
+                    <img src="@/assets/sselogo20220915_0.png" alt="logo"
+                        style="width:526px;height:109px; cursor: pointer;" @click="jumptoOff">
                 </div>
                 <div class="header-button">
                     <h2 style="color: white; width:200px">欢迎，{{ storage.get('user').username }}</h2>
+                    <h1 style="color: white;"><el-icon>
+                            <UserFilled />
+                        </el-icon>&nbsp;后台管理</h1>
+                        &nbsp;&nbsp;&nbsp;
                     <el-button type="danger" @click="logout()">退出登录</el-button>
                     <el-button @click="showChangePwd()">修改密码</el-button>
                 </div>

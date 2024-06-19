@@ -2,7 +2,7 @@
     <body>
         <div class="form-box">
             <div class="Logo">
-                <img src="https://sse.sysu.edu.cn/sites/default/files/sselogo20220915_0.png" alt="SYSU" style="width:526px;height:109px;">
+                <img src="@/assets/sselogo20220915_0.png" alt="SYSU" style="width:526px;height:109px;">
             </div>
             <el-tabs class="tabs-title" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="登录" name="first"><h1 class="login-title">登录</h1></el-tab-pane>
@@ -397,7 +397,7 @@ export default {
 body {
     position: relative;
     height: 100vh;
-    background-image: url(https://sse.sysu.edu.cn/sites/default/files/inline-images/image_275.png);
+    background-image: url('@/assets/image_275.png');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;

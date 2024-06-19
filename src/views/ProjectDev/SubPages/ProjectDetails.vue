@@ -219,7 +219,7 @@ export default {
                         authType: this.authType
                     }
                     applyAuth(params).then(() => {
-                        ElMessage.success('申请成功')
+                        ElMessage.success('申请成功, 请刷新页面查看最新权限')
                     }).catch(err => {
                         console.log(err)
                     })
@@ -228,8 +228,22 @@ export default {
                     this.chosenTable = {};
                     this.authType = '';
                 })
+                return
             }
-
+            const params = {
+                projectname: this.projectDetail.projectname,
+                tableName: this.chosenTable.tableName,
+                authType: this.authType
+            }
+            applyAuth(params).then(() => {
+                ElMessage.success('申请成功, 请等待管理员审核')
+            }).catch(err => {
+                console.log(err)
+            }).finally(() => {
+                this.isApplying = false;
+                this.chosenTable = {};
+                this.authType = '';
+            })
         },
     },
     beforeMount() {
