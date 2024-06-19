@@ -11,7 +11,7 @@
             <el-radio-button value="year" @click="goYear">年级</el-radio-button>
         </el-radio-group>
         <el-table :data="tableData" style="width: 100%">
-            <el-table-column label="个人" v-if="showSelf">
+            <el-table-column label="个人" v-if="identity === 'self'">
                 <el-table-column label="课程业绩">
                     <el-table-column prop="public_required_gpa" label="公必绩点" width="100" />
                     <el-table-column prop="specialized_required_gpa" label="专必绩点" width="100" />
@@ -35,7 +35,7 @@
                     <el-table-column prop="monographs_published" label="专利出版" width="120" />
                 </el-table-column>
             </el-table-column>
-            <el-table-column label="班级" v-if="showClass">
+            <el-table-column label="班级" v-if="identity === 'class'">
                 <el-table-column label="课程业绩">
                     <el-table-column prop="public_required_gpa" label="公必绩点" width="100" />
                     <el-table-column prop="specialized_required_gpa" label="专必绩点" width="100" />
@@ -59,7 +59,7 @@
                     <el-table-column prop="monographs_published" label="专利出版" width="120" />
                 </el-table-column>
             </el-table-column>
-            <el-table-column label="年级" v-if="showYear">
+            <el-table-column label="年级" v-if="identity === 'year'">
                 <el-table-column label="课程业绩">
                     <el-table-column prop="public_required_gpa" label="公必绩点" width="100" />
                     <el-table-column prop="specialized_required_gpa" label="专必绩点" width="100" />
@@ -92,81 +92,67 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getAvgs } from '@/api/data';
-import { onMounted } from 'vue';
 import storage from '@/store/storage';
 import { ElMessage } from 'element-plus';
 
 export default {
-
     setup() {
         const identity = ref('self')
-        const showClass = ref(false)
-        const showYear = ref(false)
-        const showSelf = ref(true)
         const search = ref('')
-        const tableData = reactive([])
+        const tableData = ref([])
+
+        const updateTableData = (key) => {
+            tableData.value[0] = storage.get('avgs')[key] || []
+        }
+
         const searchStudent = () => {
             getAvgs(search.value).then(res => {
                 storage.set('avgs', res.data)
-                console.log(1)
-                tableData.pop()
-                tableData.push(storage.get('avgs').avg1)
+                updateTableData('avg1')
                 ElMessage.success('数据获取成功')
-                identity.value='self'
+                identity.value = 'self'
             }).catch(err => {
-                console.log(err)
+                console.error(err)
                 ElMessage.error('获取数据失败, 请刷新页面重试')
             })
         }
+
         onMounted(() => {
             getAvgs(0).then(res => {
                 storage.set('avgs', res.data)
-                tableData.push(storage.get('avgs').avg1)
+                updateTableData('avg1')
                 ElMessage.success('数据获取成功')
             }).catch(err => {
-                console.log(err)
+                console.error(err)
                 ElMessage.error('获取数据失败, 请刷新页面重试')
             })
         })
+
         const goSelf = () => {
-            showClass.value = false
-            showYear.value = false
-            showSelf.value = true
-            tableData.pop()
-            tableData.push(storage.get('avgs').avg1)
+            identity.value = 'self'
+            updateTableData('avg1')
         }
 
         const goClass = () => {
-            showClass.value = true
-            showYear.value = false
-            showSelf.value = false
-            tableData.pop()
-            tableData.push(storage.get('avgs').avg2)
+            identity.value = 'class'
+            updateTableData('avg2')
         }
 
         const goYear = () => {
-            showClass.value = false
-            showYear.value = true
-            showSelf.value = false
-            tableData.pop()
-            tableData.push(storage.get('avgs').avg3)
+            identity.value = 'year'
+            updateTableData('avg3')
         }
-
-        
 
         return {
             identity,
-            showClass,
-            showYear,
-            showSelf,
+            search,
+            tableData,
+            searchStudent,
             goSelf,
             goClass,
-            goYear,
-            tableData,
-            search,
-            searchStudent
+            goYear
         }
     }
 }
