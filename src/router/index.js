@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import storage from '@/store/storage'
 
 const routes = [
     {
@@ -113,21 +114,17 @@ const router = createRouter({
     routes
 })
 
-// router.beforeEach(async (to, from) => {
-//     if (to.name !== "Login") {
-//         const isAuthenticated = storage.get("token") !== null;
-//         if (!isAuthenticated) {
-//             return {name: "Login"};
-//         }
-//         const id = storage.get("user").identity;
-//         if (to.name !== id) {
-//             return {name: id};
-//         }
-//     } else {
-//         if (storage.get("token") !== null) {
-//             return {name: storage.get("user").identity};
-//         }
-//     }
-// })
+router.beforeEach(async (to, from) => {
+    if (to.name !== "Login") {
+        const isAuthenticated = storage.get("token") !== null;
+        if (!isAuthenticated) {
+            return {name: "Login"};
+        }
+        // const id = storage.get("user").identity;
+        // if (to.name !== id) {
+        //     return {name: id, params: {username: storage.get("user").username}};
+        // }
+    }
+})
 
 export default router
