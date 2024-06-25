@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { getAvgs } from '@/api/data';
 import storage from '@/store/storage';
 import { ElMessage } from 'element-plus';
@@ -118,17 +118,6 @@ export default {
                 ElMessage.error('获取数据失败, 请刷新页面重试')
             })
         }
-
-        onMounted(() => {
-            getAvgs(0).then(res => {
-                storage.set('avgs', res.data)
-                updateTableData('avg1')
-                ElMessage.success('数据获取成功')
-            }).catch(err => {
-                console.error(err)
-                ElMessage.error('获取数据失败, 请刷新页面重试')
-            })
-        })
 
         const goSelf = () => {
             identity.value = 'self'
