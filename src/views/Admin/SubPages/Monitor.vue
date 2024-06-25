@@ -421,8 +421,4 @@ export default {
     margin-bottom: 15px;
     max-width: 600px;
 }
-
-.demo-progress .el-progress--circle {
-    margin-right: 15px;
-}
 </style>
