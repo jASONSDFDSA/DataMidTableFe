@@ -257,7 +257,8 @@ export default {
             searchAPIs(params).then(res => {
                 this.apiInfos = res.data.apiInfos
                 this.handleType()
-            }).catch(() => {
+            }).catch(error => {
+                console.log(error);
                 ElMessage.error('搜索失败')
             }).finally(() => {
                 this.isLoading = false
@@ -275,6 +276,9 @@ export default {
         },
         handleType() {
             console.log(this.apiInfos)
+            if (this.apiInfos===null){
+                return
+            }
             for (let i = 0; i < this.apiInfos.length; i++) {
                 if (this.apiInfos[i].type == 'User') {
                     this.apiInfos[i].type = '由项目用户向中台提供'

@@ -20,7 +20,7 @@
             <div v-for="project in projects" :key="project.id" class="project" @click="watchDetails(project.title)">
                 <el-row>
                     <el-col :span="3">
-                        <img :src="'http://301ebef6.r6.cpolar.top' + project.image" alt="project"
+                        <img :src="'http://127.0.0.1:2020' + project.image" alt="project"
                             style="width: 125px; height: 125px; border-radius: 10px; margin:auto;">
                     </el-col>
                     <el-col :span="19">

@@ -21,7 +21,7 @@
     <el-scrollbar height="80vh">
         <!-- Project Logo and Name -->
         <div class="pd-header">
-            <img :src="'http://301ebef6.r6.cpolar.top' + projectDetail.logo" alt="logo"
+            <img :src="'http://127.0.0.1:2020' + projectDetail.logo" alt="logo"
                 style="width: 150px; height: 150px; border-radius: 10px; margin:auto;" />
             <div class="pd-intro">
                 <div class="pd-name">

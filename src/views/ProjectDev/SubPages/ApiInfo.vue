@@ -262,6 +262,9 @@ export default {
         },
         handleType() {
             console.log(this.apiInfos)
+            if (this.apiInfos===null){
+                return
+            }
             for (let i = 0; i < this.apiInfos.length; i++) {
                 if (this.apiInfos[i].type == 'User') {
                     this.apiInfos[i].type = '由项目用户向中台提供'

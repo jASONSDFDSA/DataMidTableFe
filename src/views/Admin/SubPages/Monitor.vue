@@ -17,22 +17,30 @@
                 <div class="demo-progress">
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">CPU使用率</p>
-                        <el-progress type="dashboard" :percentage="percentageCPU" :color="colors" />
+                        <div class="progress-container">
+                            <el-progress type="dashboard" :percentage="percentageCPU" :color="colors" />
+                        </div>
                         <p style="margin:auto">{{ CPUinfo }}</p>
                     </div>
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">内存使用率</p>
-                        <el-progress type="dashboard" :percentage="percentageMem" :color="colors" />
+                        <div class="progress-container">
+                            <el-progress type="dashboard" :percentage="percentageMem" :color="colors" />
+                        </div>
                         <p style="margin:auto">{{ curMem + 'MB / ' + maxMem + "MB" }}</p>
                     </div>
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">交换区使用率</p>
-                        <el-progress type="dashboard" :percentage="percentageShare" :color="colors" />
+                        <div class="progress-container">
+                            <el-progress type="dashboard" :percentage="percentageShare" :color="colors" />
+                        </div>
                         <p style="margin:auto">{{ curShare + 'MB / ' + maxShare + "MB" }}</p>
                     </div>
                     <div style="display: flex; flex-direction: column; width: fit-content;">
                         <p style="margin:auto">磁盘使用率</p>
-                        <el-progress type="dashboard" :percentage="percentagetDisk" :color="colors" />
+                        <div class="progress-container">
+                            <el-progress type="dashboard" :percentage="percentagetDisk" :color="colors" />
+                        </div>
                         <p style="margin:auto">{{ curDisk + 'GB / ' + maxDisk + "GB" }}</p>
                     </div>
                 </div>
@@ -420,5 +428,12 @@ export default {
 .demo-progress .el-progress--line {
     margin-bottom: 15px;
     max-width: 600px;
+}
+
+.progress-container {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中（如果需要的话）*/
+  height: 100%; /* 或者你需要的任何高度 */
 }
 </style>

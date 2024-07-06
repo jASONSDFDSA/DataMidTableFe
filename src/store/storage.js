@@ -9,7 +9,7 @@ export const storage = {
     },
     get(key) {
         const value = sessionStorage.getItem(key);
-        return value ? JSON.parse(value) : null;
+        return value&&!(value==="undefined") ? JSON.parse(value) : null;
     },
     remove(key) {
         sessionStorage.removeItem(key);

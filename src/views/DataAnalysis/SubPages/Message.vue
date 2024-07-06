@@ -138,7 +138,8 @@ export default {
         },
         handleCurrentChange() {
             console.log(this.curpage)
-            this.offset = (this.curpage - 1) * this.limit
+            if(this.curpage!=undefined)
+                this.offset = (this.curpage - 1) * this.limit
             if (this.isSearching) {
                 this.searchMessages()
             } else {
